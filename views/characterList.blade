@@ -1,0 +1,17 @@
+-console.log(nestedViewItem2)
+-var insertStyle = '';
+-if(_.indexOf(nestedViewItem2.dyingIdArray, tvShowObj._id) !== -1)
+ -console.log(nestedViewItem2.dyingIdArray)
+ -insertStyle = 'opacityx: 0;'+disappearAnimation();
+-else if(_.indexOf(nestedViewItem2.birthingIdArray, tvShowObj._id) !== -1)
+ -insertStyle = 'opacityx: 0;'+appearAnimation();
+-else
+ -insertStyle = ''
+div(class='characterList', style=insertStyle)
+ h4 kharacterssd
+ -if(typeof tvShowObj !== 'undefined')
+  ul
+   foreach tvShowObj.characters as character
+    include "characterListItem" exposing character
+  input(type="text", placeholder="add character", class="addCharacterInput")
+  button(class="addCharacterButton") enter

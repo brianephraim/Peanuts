@@ -1,0 +1,41 @@
+.tvShowView{background:#222;padding:10px;margin-bottom:10px;}
+.tvShowView h2,.tvShowView h3{color:#eee;}
+.tvShowList{background:#eee;padding:10px;margin-bottom:10px;}
+.tvShowItem{background:#ccc;padding:10px;margin-bottom:10px;}
+.tvShowNameYear{border-radius:10px;background:lightyellow;padding:10px;cursor:pointer;border:2px solid white;}
+.tvShowNameYear:hover{background:yellow;border:2px solid orange;}
+.characterList{background:#aaa;-webkit-transition: all 2s;}
+.characterItem{background:#888;margin-bottom:5px;}
+.asdf{width:100%;overflow: hidden;}
+
+.slideIn {
+    -webkit-animation: slideIn 0.5s ease;
+}
+
+@-webkit-keyframes slideIn {
+    0% {
+        
+    }
+
+    100% {
+    	opacity:0;
+    }
+}
+
+
+
+
+.fadeOut {
+    -webkit-animation: fadeOut 1s ease;
+    opacity:0;
+}
+
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity:1;
+    }
+
+    100% {
+    	opacity:0;
+    }
+}

@@ -1,0 +1,19 @@
+-var xarguments = arguments
+li(class="#{tvShowObj._id} tvShowItem")
+ input(type="text", placeholder="change name", class="changeNameInput")
+ button(class="changeNameButton") enter
+ p(class="tvShowNameYear") Name: #{tvShowObj.name}, Year:  #{tvShowObj.year}
+ div(class="insertTarget") details:
+ -console.log(nestedViewItem)
+ foreach nestedViewItem.nestedViewArray as nestedViewItem2
+  -console.log(nestedViewItem2)
+  -var includeName = nestedViewItem2.includeName
+  -if(_.indexOf(nestedViewItem2.birthingIdArray, tvShowObj._id) !== -1)
+   -xarguments[0].nestedViewItem2 = nestedViewItem2
+   include includeName
+  -else if(_.indexOf(nestedViewItem2.dyingIdArray, tvShowObj._id) !== -1)
+   -xarguments[0].nestedViewItem2 = nestedViewItem2
+   include includeName
+  -else if(_.indexOf(nestedViewItem2.selectedIdArray, tvShowObj._id) !== -1)
+   -xarguments[0].nestedViewItem2 = nestedViewItem2
+   include includeName

@@ -1,0 +1,9 @@
+-var xarguments = arguments
+-arguments[0].asdf = 'dddd'
+div(class="asdf")
+ foreach nestedViewArray as nestedViewItem
+  div
+   -var includeName = nestedViewItem.includeName+".blade"
+   -xarguments[0].qwer = 'yyy'
+   -xarguments[0].nestedViewItem = nestedViewItem
+   include includeName exposing qwer
