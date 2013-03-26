@@ -57,23 +57,23 @@ meteorView.prototype.kill = function(){
       this.$el.remove();
       delete this;
    }
-//tvShowColl.findOne({_id:Session.get('selectedTvShowArray'+viewId)})
-//tvShowColl.findOne({_id:Session.get('selectedTvShowArray1')})
+//tvShowColl.findOne({_id:Session.get('selectedArray'+viewId)})
+//tvShowColl.findOne({_id:Session.get('selectedArray1')})
 
 var characterListViewGenerator = function(viewId){ return new meteorView({
     templateName: 'characterList',
     returnDataObj: function(){ 
 
-        var collection = tvShowColl.findOne({_id:Session.get('selectedTvShowArray'+viewId)});
+        var collection = tvShowColl.findOne({_id:Session.get('selectedArray'+viewId)});
         if(typeof collection !== 'undefined'){
-          self.itemsSourceData = tvShowColl.findOne({_id:Session.get('selectedTvShowArray'+viewId)});
+          self.itemsSourceData = tvShowColl.findOne({_id:Session.get('selectedArray'+viewId)});
         } else {
           self.itemsSourceData = {characters:[]}
         }
         return self.itemsSourceData
         /*
         return {
-          //characters:tvShowColl.findOne({_id:Session.get('selectedTvShowArray'+viewId)}).characters
+          //characters:tvShowColl.findOne({_id:Session.get('selectedArray'+viewId)}).characters
           characters:['asdfasdf','ewgqeg']
         }
         */
@@ -89,9 +89,9 @@ var characterListViewGenerator = function(viewId){ return new meteorView({
 function returnStates(self){
   var dataSets = {
     tvShowId: self.tvShowObj._id,
-    previousBirthingArray: Session.get('birthingTvShowArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
-    previousSelectedArray: Session.get('selectedTvShowArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
-    previousDyingArray: Session.get('dyingTvShowArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+    previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+    previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+    previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
   }
   var states = {
     previousBirthingArrayContainsId: _.indexOf(dataSets.previousBirthingArray, dataSets.tvShowId) === -1 ? false : true,
@@ -124,9 +124,9 @@ var tvShowListViewGenerator = function(viewId){ return new meteorView({
                 viewIdX: 'a',
                 viewId: viewId,
                 includeName: 'characterList',
-                birthingIdArray: Session.get('birthingTvShowArray'+viewId+'-'+'x'),
-                dyingIdArray: Session.get('dyingTvShowArray'+viewId+'-'+'x'),
-                selectedIdArray: Session.get('selectedTvShowArray'+viewId+'-'+'x'),
+                birthingIdArray: Session.get('birthingArray'+viewId+'-'+'x'),
+                dyingIdArray: Session.get('dyingArray'+viewId+'-'+'x'),
+                selectedIdArray: Session.get('selectedArray'+viewId+'-'+'x'),
                 nestedViewArray: []
               },
             ],
@@ -142,9 +142,9 @@ var tvShowListViewGenerator = function(viewId){ return new meteorView({
                 viewIdX: 'b',
                 viewId: viewId,
                 includeName: 'characterList',
-                birthingIdArray: Session.get('birthingTvShowArray'+viewId+'-'+'y'),
-                dyingIdArray: Session.get('dyingTvShowArray'+viewId+'-'+'y'),
-                selectedIdArray: Session.get('selectedTvShowArray'+viewId+'-'+'y'),
+                birthingIdArray: Session.get('birthingArray'+viewId+'-'+'y'),
+                dyingIdArray: Session.get('dyingArray'+viewId+'-'+'y'),
+                selectedIdArray: Session.get('selectedArray'+viewId+'-'+'y'),
                 nestedViewArray: []
               },
             ],
@@ -161,20 +161,20 @@ var tvShowListViewGenerator = function(viewId){ return new meteorView({
         //Add to selected when appropriate
         if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){
           s.previousSelectedArray.push(s.tvShowId)
-          s.setDataArray('selectedTvShowArray',s.previousSelectedArray)
+          s.setDataArray('selectedArray',s.previousSelectedArray)
         }
         if(!s.previousSelectedArrayExists){
           s.previousSelectedArray = [s.tvShowId]
-          s.setDataArray('selectedTvShowArray',s.previousSelectedArray)
+          s.setDataArray('selectedArray',s.previousSelectedArray)
         }
 
         //Add to birthing when appropriate
         if(s.previousBirthingArrayExists && !s.previousBirthingArrayContainsId){
           s.previousBirthingArray.push(s.tvShowId)
-          s.setDataArray('birthingTvShowArray',s.previousBirthingArray)
+          s.setDataArray('birthingArray',s.previousBirthingArray)
         }
         if(!s.previousBirthingArrayExists){
-          s.setDataArray('birthingTvShowArray',[s.tvShowId])
+          s.setDataArray('birthingArray',[s.tvShowId])
         }
 
         //Make an existing characterList disappear
@@ -188,8 +188,8 @@ var tvShowListViewGenerator = function(viewId){ return new meteorView({
           } else {
             s.previousDyingArray = [s.tvShowId];
           }
-          s.setDataArray('dyingTvShowArray',s.previousDyingArray)
-          s.setDataArray('selectedTvShowArray',s.previousSelectedArray)
+          s.setDataArray('dyingArray',s.previousDyingArray)
+          s.setDataArray('selectedArray',s.previousSelectedArray)
         }
       },
       "click .changeNameButton": function (e, tmpl, x) {
@@ -198,7 +198,7 @@ var tvShowListViewGenerator = function(viewId){ return new meteorView({
       },
       "click .addCharacterButton": function (e, tmpl) {
         var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
-        //var currentTvShowId = Session.get('selectedTvShowArray'+viewId+'-'+this.nestedViewItem.viewIdX);
+        //var currentTvShowId = Session.get('selectedArray'+viewId+'-'+this.nestedViewItem.viewIdX);
         var currentTvShowId = this.tvShowObj._id
         console.log(currentTvShowId)
         console.log(this.tvShowObj._id)
@@ -215,7 +215,7 @@ var tvShowListViewGenerator = function(viewId){ return new meteorView({
                {
                   listItem$el:$el,
                   viewId:viewId,
-                  viewIdPrefix:'selectedTvShowArray',
+                  viewIdPrefix:'selectedArray',
                   subscriptionName:'tvShows',
                   selfSubviewAssignment:self.charactersView,
                   viewGenerator:characterListViewGenerator,
@@ -316,11 +316,11 @@ if (Meteor.isClient) {
       
       if(s.previousBirthingArrayExists && s.previousBirthingArrayContainsId){
         s.previousBirthingArray.splice(_.indexOf(s.previousBirthingArray, s.tvShowId),1)
-        s.setDataArray('birthingTvShowArray',s.previousBirthingArray)
+        s.setDataArray('birthingArray',s.previousBirthingArray)
       }
       if(s.previousDyingArrayExists && s.previousDyingArrayContainsId){
         s.previousDyingArray.splice(_.indexOf(s.previousDyingArray, s.tvShowId),1)
-        s.setDataArray('dyingTvShowArray',s.previousDyingArray)
+        s.setDataArray('dyingArray',s.previousDyingArray)
       }
 
 
@@ -345,7 +345,7 @@ if (Meteor.isClient) {
   */
   var curentSelectionFrag = makeReactive( 
      function(){
-        var doc = tvShowColl.findOne({_id:Session.get('selectedTvShowArray1')});
+        var doc = tvShowColl.findOne({_id:Session.get('selectedArray1')});
         var string = typeof doc !== 'undefined' ? doc.name : 'none selected';
         return 'Current selection: '+string;
      } 
