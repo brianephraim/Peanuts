@@ -35,7 +35,6 @@ var makeReactive = function(fun){
 meteorView.prototype.insertReactiveSubviewIntoListItemViaSession = function(settings){
     var self2 = this;
     Meteor.subscribe(settings.subscriptionName, function(){
-      console.log('asdfasdf1111')
        settings.listParent$el[settings.targetParentMethod](
           makeReactive( 
              function(){
@@ -81,17 +80,16 @@ var characterListViewGenerator = function(viewId){ return new meteorView({
     },
     eventMap: {
       "click": function (e, tmpl, x) {
-        console.log('ffffff')
       }
     }
   })
 }
-function returnStates(self){
+function returnStates(self,nameOfCreated){
   var dataSets = {
     tvShowId: self.tvShowObj._id,
-    previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
-    previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
-    previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+    previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX+'-'+nameOfCreated),
+    previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX+'-'+nameOfCreated),
+    previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX+'-'+nameOfCreated),
   }
   var states = {
     previousBirthingArrayContainsId: _.indexOf(dataSets.previousBirthingArray, dataSets.tvShowId) === -1 ? false : true,
@@ -103,21 +101,56 @@ function returnStates(self){
     previousDyingArrayExists: typeof dataSets.previousDyingArray === 'undefined' ? false : true,
 
     setDataArray: function(name,arr){
-      Session.set(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX,arr);
+      console.log(self)
+      console.log(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX+'-'+nameOfCreated)
+      Session.set(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX+'-'+nameOfCreated,arr);
     }
   }
   return $.extend(states, dataSets);
 }
 var tvShowListViewGenerator = function(viewId){ return new meteorView({
     templateName: 'rootView', 
-    returnDataObj: function(){  
+    returnDataObj: function(){ 
+      var k = 0 
       return {
         nestedViewArray: [ 
+          (function(){
+            return new (function(){
+              var self = this;
+              
+              this.viewId = viewId;
+              this.dataArray = tvShowColl.find().fetch();
+              this.includeName = 'tvShowList';
+              this.viewIdX = this.includeName + (k++);
+              this.nestedViewArray = (function(){
+                var k = 0;
+                return [
+                  (function(parent){
+                    
+                    return new (function(){
+                      var self = this;
+                      this.parent = parent;
+                      this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
+                      
+                      
+                      this.includeName = 'characterList';
+                      this.viewIdX = this.includeName + (k++);
+                      console.log('birthingArray'+this.viewId+'-'+this.viewIdX)
+                      this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
+                      this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
+                      this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
+                      this.nestedViewArray = []
+                    })
+                  })(self)
+                ]
+              })()
+              
+            })();
+          })(),
           {
             viewIdX: 'x',
             viewId: viewId,
             dataArray: tvShowColl.find().fetch(),
-
             includeName: 'tvShowList',
             nestedViewArray: [
               {
@@ -154,10 +187,10 @@ var tvShowListViewGenerator = function(viewId){ return new meteorView({
     },
     eventMap: {
       "click .tvShowNameYear": function (e, tmpl, x) {
-        console.log(this)
+        
         var self = this;
-        var s = returnStates(self);
-
+        var s = returnStates(self,'characterList0');
+        console.log(this)
         //Add to selected when appropriate
         if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){
           s.previousSelectedArray.push(s.tvShowId)
@@ -200,8 +233,6 @@ var tvShowListViewGenerator = function(viewId){ return new meteorView({
         var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
         //var currentTvShowId = Session.get('selectedArray'+viewId+'-'+this.nestedViewItem.viewIdX);
         var currentTvShowId = this.tvShowObj._id
-        console.log(currentTvShowId)
-        console.log(this.tvShowObj._id)
         var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
         currentCharactersArray.push(newCharacter);
         tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
@@ -302,17 +333,14 @@ if (Meteor.isClient) {
 
   Template.characterList.events = {
     "click": function (e, tmpl, x) {
-      console.log(this)
     },
     "webkitTransitionEnd": function (e, tmpl, x) {
-      console.log('ddfdsfadfasdfasdfasd')
-      console.log(this)
     },
     "webkitAnimationEnd": function (e, tmpl, x) {
       var self = this;
+      console.log(this)
       
-      
-      var s = returnStates(self);
+      var s = returnStates(self,this.nestedViewItem2.viewIdX);
       
       if(s.previousBirthingArrayExists && s.previousBirthingArrayContainsId){
         s.previousBirthingArray.splice(_.indexOf(s.previousBirthingArray, s.tvShowId),1)
@@ -334,7 +362,7 @@ if (Meteor.isClient) {
 
   
 
-  var tvShowListView1 = tvShowListViewGenerator('1')
+  var tvShowListView1 = tvShowListViewGenerator('base')
   //var tvShowListView2 = tvShowListViewGenerator('2')
   /*
   var tvShowListView2 = new meteorView({

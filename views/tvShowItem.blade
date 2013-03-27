@@ -4,9 +4,7 @@ li(class="#{tvShowObj._id} tvShowItem")
  button(class="changeNameButton") enter
  p(class="tvShowNameYear") Name: #{tvShowObj.name}, Year:  #{tvShowObj.year}
  div(class="insertTarget") details:
- -console.log(nestedViewItem)
  foreach nestedViewItem.nestedViewArray as nestedViewItem2
-  -console.log(nestedViewItem2)
   -var includeName = nestedViewItem2.includeName
   -if(_.indexOf(nestedViewItem2.birthingIdArray, tvShowObj._id) !== -1)
    -xarguments[0].nestedViewItem2 = nestedViewItem2
