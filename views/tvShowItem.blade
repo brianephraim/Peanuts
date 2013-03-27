@@ -3,6 +3,8 @@ li(class="#{tvShowObj._id} tvShowItem")
  input(type="text", placeholder="change name", class="changeNameInput")
  button(class="changeNameButton") enter
  p(class="tvShowNameYear") Name: #{tvShowObj.name}, Year:  #{tvShowObj.year}
+ p(class="showButton showCharacters") Show Characters
+ p(class="showButton showGenres") Show Genres
  div(class="insertTarget") details:
  foreach nestedViewItem.nestedViewArray as nestedViewItem2
   -var includeName = nestedViewItem2.includeName

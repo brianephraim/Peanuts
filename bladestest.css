@@ -2,8 +2,9 @@
 .tvShowView h2,.tvShowView h3{color:#eee;}
 .tvShowList{background:#eee;padding:10px;margin-bottom:10px;}
 .tvShowItem{background:#ccc;padding:10px;margin-bottom:10px;}
-.tvShowNameYear{border-radius:10px;background:lightyellow;padding:10px;cursor:pointer;border:2px solid white;}
-.tvShowNameYear:hover{background:yellow;border:2px solid orange;}
+.tvShowNameYear{font-size:20px;}
+.showButton{border-radius:10px;background:lightyellow;padding:10px;cursor:pointer;border:2px solid white;}
+.showButton:hover{background:yellow;border:2px solid orange;}
 .characterList{background:#aaa;-webkit-transition: all 2s;}
 .characterItem{background:#888;margin-bottom:5px;}
 .asdf{width:100%;overflow: hidden;}

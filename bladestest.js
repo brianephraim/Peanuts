@@ -101,96 +101,236 @@ function returnStates(self,nameOfCreated){
     previousDyingArrayExists: typeof dataSets.previousDyingArray === 'undefined' ? false : true,
 
     setDataArray: function(name,arr){
-      console.log(self)
-      console.log(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX+'-'+nameOfCreated)
       Session.set(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX+'-'+nameOfCreated,arr);
     }
   }
   return $.extend(states, dataSets);
 }
+function createAView(parent,k,includeName,nestedViewArray){
+  return new (function(){
+    var self = this;
+    this.parent = parent;
+    this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
+    this.includeName = includeName;
+    this.viewIdX = this.includeName + (k);
+    this.dataArray = tvShowColl.find().fetch();
+    this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
+    this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
+    this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
+    this.nestedViewArray = nestedViewArray(self)
+  })();
+}
 var tvShowListViewGenerator = function(viewId){ return new meteorView({
     templateName: 'rootView', 
     returnDataObj: function(){ 
-      var k = 0 
-      return {
-        nestedViewArray: [ 
-          (function(){
-            return new (function(){
-              var self = this;
-              
-              this.viewId = viewId;
-              this.dataArray = tvShowColl.find().fetch();
-              this.includeName = 'tvShowList';
-              this.viewIdX = this.includeName + (k++);
-              this.nestedViewArray = (function(){
+      return new (function(){
+        var self = this;
+        this.viewId = viewId;
+        this.viewIdX = '';
+        this.nestedViewArray= (function(){
+          var k = 0;
+          return [
+            createAView(self,k++,'tvShowList',
+              function(self){ return (function(){
                 var k = 0;
                 return [
-                  (function(parent){
-                    
-                    return new (function(){
-                      var self = this;
-                      this.parent = parent;
-                      this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
-                      
-                      
-                      this.includeName = 'characterList';
-                      this.viewIdX = this.includeName + (k++);
-                      console.log('birthingArray'+this.viewId+'-'+this.viewIdX)
-                      this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
-                      this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
-                      this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
-                      this.nestedViewArray = []
-                    })
-                  })(self)
+                  createAView(self,k++,'characterList',
+                    function(self){ return (function(){
+                      var k = 0;
+                      return []
+                    })()}
+                  ),
+                  createAView(self,k++,'genreList',
+                    function(self){ return (function(){
+                      var k = 0;
+                      return []
+                    })()}
+                  )
                 ]
-              })()
-              
-            })();
-          })(),
-          {
-            viewIdX: 'x',
-            viewId: viewId,
-            dataArray: tvShowColl.find().fetch(),
-            includeName: 'tvShowList',
-            nestedViewArray: [
-              {
-                viewIdX: 'a',
-                viewId: viewId,
-                includeName: 'characterList',
-                birthingIdArray: Session.get('birthingArray'+viewId+'-'+'x'),
-                dyingIdArray: Session.get('dyingArray'+viewId+'-'+'x'),
-                selectedIdArray: Session.get('selectedArray'+viewId+'-'+'x'),
-                nestedViewArray: []
-              },
-            ],
-          },
-          {
-            viewIdX: 'y',
-            viewId: viewId,
-            dataArray: tvShowColl.find().fetch(),
+              })()}
+            ),
+            createAView(self,k++,'tvShowList',
+              function(self){ return (function(){
+                var k = 0;
+                return [
+                  createAView(self,k++,'characterList',
+                    function(self){ return (function(){
+                      var k = 0;
+                      return []
+                    })()}
+                  )
+                ]
+              })()}
+            ),
+            createAView(self,k++,'tvShowList',
+              function(self){ return (function(){
+                var k = 0;
+                return [
+                  createAView(self,k++,'characterList',
+                    function(self){ return (function(){
+                      var k = 0;
+                      return []
+                    })()}
+                  )
+                ]
+              })()}
+            ),
+            /*
+            (function(parent,k){
+              return new (function(){
+                var self = this;
+                this.parent = parent;
+                this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
+                this.includeName = 'tvShowList';
+                this.viewIdX = this.includeName + (k);
+                this.dataArray = tvShowColl.find().fetch();
+                //this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
+                //this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
+                //this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
+                this.nestedViewArray = (function(){
+                  var k = 0;
+                  return [
+                    (function(parent,k){
+                      
+                      return new (function(){
+                        var self = this;
+                        this.parent = parent;
+                        this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
+                        this.includeName = 'characterList';
+                        this.viewIdX = this.includeName + (k);
+                        //this.dataArray = tvShowColl.find().fetch();
+                        this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
+                        this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
+                        this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
+                        this.nestedViewArray = []
+                      })
+                    })(self,k++)
+                  ]
+                })()
+                
+              })();
+            })(self,k++),
+            (function(parent,k){
+              return new (function(){
+                var self = this;
+                this.parent = parent;
+                this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
+                this.includeName = 'tvShowList';
+                this.viewIdX = this.includeName + (k);
+                this.dataArray = tvShowColl.find().fetch();
+                //this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
+                //this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
+                //this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
+                this.nestedViewArray = (function(){
+                  var k = 0;
+                  return [
+                    (function(parent,k){
+                      
+                      return new (function(){
+                        var self = this;
+                        this.parent = parent;
+                        this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
+                        this.includeName = 'characterList';
+                        this.viewIdX = this.includeName + (k);
+                        //this.dataArray = tvShowColl.find().fetch();
+                        this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
+                        this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
+                        this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
+                        this.nestedViewArray = []
+                      })
+                    })(self,k++)
+                  ]
+                })()
+                
+              })();
+            })(self,k++),
+            */
+            /*
+            {
+              viewIdX: 'x',
+              viewId: viewId,
+              dataArray: tvShowColl.find().fetch(),
+              includeName: 'tvShowList',
+              nestedViewArray: [
+                {
+                  viewIdX: 'a',
+                  viewId: viewId,
+                  includeName: 'characterList',
+                  birthingIdArray: Session.get('birthingArray'+viewId+'-'+'x'),
+                  dyingIdArray: Session.get('dyingArray'+viewId+'-'+'x'),
+                  selectedIdArray: Session.get('selectedArray'+viewId+'-'+'x'),
+                  nestedViewArray: []
+                },
+              ],
+            },
+            {
+              viewIdX: 'y',
+              viewId: viewId,
+              dataArray: tvShowColl.find().fetch(),
 
-            includeName: 'tvShowList',
-            nestedViewArray: [
-              {
-                viewIdX: 'b',
-                viewId: viewId,
-                includeName: 'characterList',
-                birthingIdArray: Session.get('birthingArray'+viewId+'-'+'y'),
-                dyingIdArray: Session.get('dyingArray'+viewId+'-'+'y'),
-                selectedIdArray: Session.get('selectedArray'+viewId+'-'+'y'),
-                nestedViewArray: []
-              },
-            ],
-          }
-        ]
-      }
+              includeName: 'tvShowList',
+              nestedViewArray: [
+                {
+                  viewIdX: 'b',
+                  viewId: viewId,
+                  includeName: 'characterList',
+                  birthingIdArray: Session.get('birthingArray'+viewId+'-'+'y'),
+                  dyingIdArray: Session.get('dyingArray'+viewId+'-'+'y'),
+                  selectedIdArray: Session.get('selectedArray'+viewId+'-'+'y'),
+                  nestedViewArray: []
+                },
+              ],
+            }
+            */
+          ]
+        })()
+      })()
     },
     eventMap: {
-      "click .tvShowNameYear": function (e, tmpl, x) {
-        
+      "click .showCharacters": function (e, tmpl, x) {
+        console.log('click',this)
         var self = this;
         var s = returnStates(self,'characterList0');
-        console.log(this)
+        
+        //Add to selected when appropriate
+        if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){
+          s.previousSelectedArray.push(s.tvShowId)
+          s.setDataArray('selectedArray',s.previousSelectedArray)
+        }
+        if(!s.previousSelectedArrayExists){
+          s.previousSelectedArray = [s.tvShowId]
+          s.setDataArray('selectedArray',s.previousSelectedArray)
+        }
+
+        //Add to birthing when appropriate
+        if(s.previousBirthingArrayExists && !s.previousBirthingArrayContainsId){
+          s.previousBirthingArray.push(s.tvShowId)
+          s.setDataArray('birthingArray',s.previousBirthingArray)
+        }
+        if(!s.previousBirthingArrayExists){
+          s.setDataArray('birthingArray',[s.tvShowId])
+        }
+
+        //Make an existing characterList disappear
+        if(
+          (s.previousSelectedArrayExists && s.previousSelectedArrayContainsId) && 
+          (!s.previousBirthingArrayExists || !s.previousBirthingArrayContainsId)
+        ){
+          s.previousSelectedArray.splice(_.indexOf(s.previousSelectedArray, s.tvShowId),1)
+          if(s.previousDyingArrayExists && !s.previousDyingArrayContainsId){
+            s.previousDyingArray.push(s.tvShowId)
+          } else {
+            s.previousDyingArray = [s.tvShowId];
+          }
+          s.setDataArray('dyingArray',s.previousDyingArray)
+          s.setDataArray('selectedArray',s.previousSelectedArray)
+        }
+      },
+      "click .showGenres": function (e, tmpl, x) {
+        console.log('click',this)
+        var self = this;
+        var s = returnStates(self,'genreList1');
+        
         //Add to selected when appropriate
         if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){
           s.previousSelectedArray.push(s.tvShowId)
@@ -338,7 +478,7 @@ if (Meteor.isClient) {
     },
     "webkitAnimationEnd": function (e, tmpl, x) {
       var self = this;
-      console.log(this)
+      console.log('webkitAnimationEnd',this)
       
       var s = returnStates(self,this.nestedViewItem2.viewIdX);
       
@@ -350,10 +490,28 @@ if (Meteor.isClient) {
         s.previousDyingArray.splice(_.indexOf(s.previousDyingArray, s.tvShowId),1)
         s.setDataArray('dyingArray',s.previousDyingArray)
       }
+    }
+  }
 
-
-
-
+  Template.genreList.events = {
+    "click": function (e, tmpl, x) {
+    },
+    "webkitTransitionEnd": function (e, tmpl, x) {
+    },
+    "webkitAnimationEnd": function (e, tmpl, x) {
+      var self = this;
+      console.log('webkitAnimationEnd',this)
+      
+      var s = returnStates(self,this.nestedViewItem2.viewIdX);
+      
+      if(s.previousBirthingArrayExists && s.previousBirthingArrayContainsId){
+        s.previousBirthingArray.splice(_.indexOf(s.previousBirthingArray, s.tvShowId),1)
+        s.setDataArray('birthingArray',s.previousBirthingArray)
+      }
+      if(s.previousDyingArrayExists && s.previousDyingArrayContainsId){
+        s.previousDyingArray.splice(_.indexOf(s.previousDyingArray, s.tvShowId),1)
+        s.setDataArray('dyingArray',s.previousDyingArray)
+      }
     }
   }
 
@@ -416,12 +574,14 @@ if(Meteor.isServer) {
           {
              name:'Game of Thrones',
              year:'2011',
-             characters: ['Jon Snow','Tyrion Lannister','Daenerys Targaryen']
+             characters: ['Jon Snow','Tyrion Lannister','Daenerys Targaryen'],
+             genres: ['Adventure','Drama','Fantasy']
           },
           {
              name:'The Walking Dead',
              year:'2010',
-             characters: ['Rick Grimes','Daryl Dixon','Glenn Rhee']
+             characters: ['Rick Grimes','Daryl Dixon','Glenn Rhee'],
+             genres: ['Drama','Horror','Thriller']
           }
        ]
        

@@ -1,0 +1,15 @@
+-var insertStyle = '';
+-if(_.indexOf(nestedViewItem2.dyingIdArray, tvShowObj._id) !== -1)
+ -insertStyle = 'opacityx: 0;'+disappearAnimation();
+-else if(_.indexOf(nestedViewItem2.birthingIdArray, tvShowObj._id) !== -1)
+ -insertStyle = 'opacityx: 0;'+appearAnimation();
+-else
+ -insertStyle = ''
+div(class='characterList', style=insertStyle)
+ h4 kharacterssd
+ -if(typeof tvShowObj !== 'undefined')
+  ul
+   foreach tvShowObj.genres as genre
+    include "genreListItem" exposing genre
+  input(type="text", placeholder="add character", class="addCharacterInput")
+  button(class="addCharacterButton") enter
