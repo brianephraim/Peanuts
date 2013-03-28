@@ -2,11 +2,8 @@
 var tvShowColl = new Meteor.Collection("tvShows");
 
 if (Meteor.isClient) {
- //var Peanut = new (function(){
-
-  
-
-    var meteorView = function(options){
+  var Peanuts = new (function(){
+    this.meteorView = function(options){
       var self = this;
       var defaults = {
          templateName: '',
@@ -24,12 +21,13 @@ if (Meteor.isClient) {
       this.frag = frag;
       this.$el = $el;
     }
-    function returnStates(self){
+  
+    this.returnStates = function(self){
       var dataSets = {
         tvShowId: self.tvShowObj._id,
-        previousBirthingArray: Session.get('birthingArray'+self.nestedViewItexm.viewId+'-'+self.nestedViewItexm.viewIdX),
-        previousSelectedArray: Session.get('selectedArray'+self.nestedViewItexm.viewId+'-'+self.nestedViewItexm.viewIdX),
-        previousDyingArray: Session.get('dyingArray'+self.nestedViewItexm.viewId+'-'+self.nestedViewItexm.viewIdX),
+        previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+        previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+        previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
       }
       var states = {
         previousBirthingArrayContainsId: _.indexOf(dataSets.previousBirthingArray, dataSets.tvShowId) === -1 ? false : true,
@@ -41,13 +39,14 @@ if (Meteor.isClient) {
         previousDyingArrayExists: typeof dataSets.previousDyingArray === 'undefined' ? false : true,
 
         setDataArray: function(name,arr){
-          Session.set(name+self.nestedViewItexm.viewId+'-'+self.nestedViewItexm.viewIdX,arr);
+          Session.set(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX,arr);
         }
       }
       return $.extend(states, dataSets);
     }
-    function showHideView(self){
-      var s = returnStates(self);
+  
+    this.showHideView = function(self){
+      var s = Peanuts.returnStates(self);
       //Add to selected when appropriate
       if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){
         s.previousSelectedArray.push(s.tvShowId)
@@ -82,7 +81,8 @@ if (Meteor.isClient) {
         s.setDataArray('dyingArray',s.previousDyingArray)
       }
     }
-    function createAView(parent,k,includeName,nestedViewArray){
+  
+    this.createAView = function(parent,k,includeName,nestedViewArray){
       return new (function(){
         var self = this;
         this.parent = parent;
@@ -96,8 +96,8 @@ if (Meteor.isClient) {
         this.nestedViewArray = nestedViewArray(self)
       })();
     }
-    function animationEndHideShowCleanup(self,viewNameWithIndex){
-      var s = returnStates(self);
+    this.animationEndHideShowCleanup = function(self,viewNameWithIndex){
+      var s = Peanuts.returnStates(self);
       if(s.previousBirthingArrayExists && s.previousBirthingArrayContainsId){
         s.previousBirthingArray.splice(_.indexOf(s.previousBirthingArray, s.tvShowId),1)
         s.setDataArray('birthingArray',s.previousBirthingArray)
@@ -107,6 +107,7 @@ if (Meteor.isClient) {
         s.setDataArray('dyingArray',s.previousDyingArray)
       }
     }
+  
 
 
     var $window = $(window);
@@ -121,68 +122,67 @@ if (Meteor.isClient) {
         resizeAction();
       }, 300);
     });
-
-    function appearAnimation(){
-      var anim = CSSAnimations.create();
-      for(var i = 0; i<=100; i++){
-        var interpolatedValues = Tweenable.interpolate(
-          {
-            '-webkit-transform': 'translate3d('+windowWidth+'px,0,0)'
-          },
-          {
-            '-webkit-transform': 'translate3d(0px,0,0)'
-          },
-          i*0.01,
-          'easeOutBounce'
-        );
-        anim.setKeyframe(i+'%', interpolatedValues);
+    this.animations = {
+      appear:function(){
+        var anim = CSSAnimations.create();
+        for(var i = 0; i<=100; i++){
+          var interpolatedValues = Tweenable.interpolate(
+            {
+              '-webkit-transform': 'translate3d('+windowWidth+'px,0,0)'
+            },
+            {
+              '-webkit-transform': 'translate3d(0px,0,0)'
+            },
+            i*0.01,
+            'easeOutBounce'
+          );
+          anim.setKeyframe(i+'%', interpolatedValues);
+        }
+        return '-webkit-animation: '+anim.name+' 1s ease;';
+      },
+      disappear:function(){
+        var anim = CSSAnimations.create();
+        for(var i = 0; i<=100; i++){
+          var interpolatedValues = Tweenable.interpolate(
+            {
+              '-webkit-transform': 'translate3d(0px,0,0)'
+            },
+            {
+              '-webkit-transform': 'translate3d('+windowWidth+'px,0,0)'
+            },
+            i*0.01,
+            'easeOutBounce'
+          );
+          anim.setKeyframe(i+'%', interpolatedValues);
+        }
+        return '-webkit-animation: '+anim.name+' 1s ease;';
       }
-      return '-webkit-animation: '+anim.name+' 1s ease;';
     }
-
-    function disappearAnimation(){
-      var anim = CSSAnimations.create();
-      for(var i = 0; i<=100; i++){
-        var interpolatedValues = Tweenable.interpolate(
-          {
-            '-webkit-transform': 'translate3d(0px,0,0)'
-          },
-          {
-            '-webkit-transform': 'translate3d('+windowWidth+'px,0,0)'
-          },
-          i*0.01,
-          'easeOutBounce'
-        );
-        anim.setKeyframe(i+'%', interpolatedValues);
-      }
-      return '-webkit-animation: '+anim.name+' 1s ease;';
-    }
+    
+  })()
 
     Template.characterListPanel.events = {
       "webkitAnimationEnd": function (e, tmpl, x) {
         var self = this;
-        console.log(this)
-        animationEndHideShowCleanup(self)
+        Peanuts.animationEndHideShowCleanup(self)
       }
     }
     Template.genreListPanel.events = {
       "webkitAnimationEnd": function (e, tmpl, x) {
         var self = this;
-        animationEndHideShowCleanup(self)
+        Peanuts.animationEndHideShowCleanup(self)
       }
     }
     Template.genreListButton.events = {
       "click": function (e, tmpl, x) {
         var self = this;
-        console.log(this)
-        showHideView(self)
+        Peanuts.showHideView(self)
       }
     }
     Template.characterListButton.events = {
       "click": function (e, tmpl, x) {
         var self = this;
-        console.log(this)
-        showHideView(self)
+        Peanuts.showHideView(self)
       }
     }
   //})()
@@ -190,7 +190,7 @@ if (Meteor.isClient) {
   Meteor.startup(function () {
     return (function(){
       $('body').append(
-        new meteorView({
+        new Peanuts.meteorView({
           templateName: 'rootView', 
           returnDataObj: function(){ 
             return new (function(){
@@ -200,17 +200,17 @@ if (Meteor.isClient) {
               this.nestedViewArray= (function(){
                 var k = 0;
                 return [
-                  createAView(self,k++,'tvShowList',
+                  Peanuts.createAView(self,k++,'tvShowList',
                     function(self){ return (function(){
                       var k = 0;
                       return [
-                        createAView(self,k++,'characterList',
+                        Peanuts.createAView(self,k++,'characterList',
                           function(self){ return (function(){
                             var k = 0;
                             return []
                           })()}
                         ),
-                        createAView(self,k++,'genreList',
+                        Peanuts.createAView(self,k++,'genreList',
                           function(self){ return (function(){
                             var k = 0;
                             return []
@@ -219,17 +219,17 @@ if (Meteor.isClient) {
                       ]
                     })()}
                   ),
-                  createAView(self,k++,'tvShowList',
+                  Peanuts.createAView(self,k++,'tvShowList',
                     function(self){ return (function(){
                       var k = 0;
                       return [
-                        createAView(self,k++,'characterList',
+                        Peanuts.createAView(self,k++,'characterList',
                           function(self){ return (function(){
                             var k = 0;
                             return []
                           })()}
                         ),
-                        createAView(self,k++,'genreList',
+                        Peanuts.createAView(self,k++,'genreList',
                           function(self){ return (function(){
                             var k = 0;
                             return []
@@ -293,10 +293,4 @@ if(Meteor.isServer) {
     }
 
 }
-
-var asdf = {
-  qwer: 'hey hey hey',
-  zxcv: this.qwer
-}
-console.log(asdf.zxcv)
 

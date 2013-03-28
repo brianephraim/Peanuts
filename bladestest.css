@@ -7,36 +7,4 @@
 .showButton:hover{background:yellow;border:2px solid orange;}
 .characterList{background:#aaa;-webkit-transition: all 2s;}
 .characterItem{background:#888;margin-bottom:5px;}
-.asdf{width:100%;overflow: hidden;}
-
-.slideIn {
-    -webkit-animation: slideIn 0.5s ease;
-}
-
-@-webkit-keyframes slideIn {
-    0% {
-        
-    }
-
-    100% {
-    	opacity:0;
-    }
-}
-
-
-
-
-.fadeOut {
-    -webkit-animation: fadeOut 1s ease;
-    opacity:0;
-}
-
-@-webkit-keyframes fadeOut {
-    0% {
-        opacity:1;
-    }
-
-    100% {
-    	opacity:0;
-    }
-}
+.rootViewWrapper{width:100%;overflow: hidden;}

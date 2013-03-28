@@ -1,22 +1,18 @@
--var xarguments = arguments
 li(class="#{tvShowObj._id} tvShowItem")
  input(type="text", placeholder="change name", class="changeNameInput")
  button(class="changeNameButton") enter
  p(class="tvShowNameYear") Name: #{tvShowObj.name}, Year:  #{tvShowObj.year}
  div(class="insertTarget") details:
- foreach nestedViewItem.nestedViewArray as nestedViewItexm
-  -var dynamicIncludeName = nestedViewItexm.includeName + 'Button'
-  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItexm, tvShowObj
-  -var includeName = nestedViewItexm.includeName
-  -if(_.indexOf(nestedViewItexm.birthingIdArray, tvShowObj._id) !== -1)
-   -xarguments[0].nestedViewItexm = nestedViewItexm
-   -var dynamicIncludeName = nestedViewItexm.includeName + 'Panel'
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItexm, tvShowObj
-  -else if(_.indexOf(nestedViewItexm.dyingIdArray, tvShowObj._id) !== -1)
-   -xarguments[0].nestedViewItexm = nestedViewItexm
-   -var dynamicIncludeName = nestedViewItexm.includeName + 'Panel'
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItexm, tvShowObj
-  -else if(_.indexOf(nestedViewItexm.selectedIdArray, tvShowObj._id) !== -1)
-   -xarguments[0].nestedViewItexm = nestedViewItexm
-   -var dynamicIncludeName = nestedViewItexm.includeName + 'Panel'
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItexm, tvShowObj
+ foreach nestedViewItem.nestedViewArray as nestedViewItem
+  -var dynamicIncludeName = nestedViewItem.includeName + 'Button'
+  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, tvShowObj
+  -var includeName = nestedViewItem.includeName
+  -if(_.indexOf(nestedViewItem.birthingIdArray, tvShowObj._id) !== -1)
+   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, tvShowObj
+  -else if(_.indexOf(nestedViewItem.dyingIdArray, tvShowObj._id) !== -1)
+   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, tvShowObj
+  -else if(_.indexOf(nestedViewItem.selectedIdArray, tvShowObj._id) !== -1)
+   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, tvShowObj

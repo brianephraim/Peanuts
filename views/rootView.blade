@@ -1,7 +1,5 @@
--var xarguments = arguments
-div(class="asdf")
+div(class="rootViewWrapper")
  foreach nestedViewArray as nestedViewItem
   div
-   -var includeName = nestedViewItem.includeName+".blade"
-   -xarguments[0].nestedViewItem = nestedViewItem
-   include includeName
+   -var dynamicIncludeName = nestedViewItem.includeName
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem

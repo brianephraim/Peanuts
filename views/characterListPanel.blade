@@ -1,8 +1,8 @@
 -var insertStyle = '';
--if(_.indexOf(nestedViewItexm.dyingIdArray, tvShowObj._id) !== -1)
- -insertStyle = 'opacityx: 0;'+disappearAnimation();
--else if(_.indexOf(nestedViewItexm.birthingIdArray, tvShowObj._id) !== -1)
- -insertStyle = 'opacityx: 0;'+appearAnimation();
+-if(_.indexOf(nestedViewItem.dyingIdArray, tvShowObj._id) !== -1)
+ -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
+-else if(_.indexOf(nestedViewItem.birthingIdArray, tvShowObj._id) !== -1)
+ -insertStyle = 'opacityx: 0;'+Peanuts.animations.appear();
 -else
  -insertStyle = ''
 div(class='characterList', style=insertStyle)
