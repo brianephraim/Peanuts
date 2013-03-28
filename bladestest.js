@@ -27,9 +27,9 @@ if (Meteor.isClient) {
     function returnStates(self){
       var dataSets = {
         tvShowId: self.tvShowObj._id,
-        previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem2.viewId+'-'+self.nestedViewItem2.viewIdX),
-        previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem2.viewId+'-'+self.nestedViewItem2.viewIdX),
-        previousDyingArray: Session.get('dyingArray'+self.nestedViewItem2.viewId+'-'+self.nestedViewItem2.viewIdX),
+        previousBirthingArray: Session.get('birthingArray'+self.nestedViewItexm.viewId+'-'+self.nestedViewItexm.viewIdX),
+        previousSelectedArray: Session.get('selectedArray'+self.nestedViewItexm.viewId+'-'+self.nestedViewItexm.viewIdX),
+        previousDyingArray: Session.get('dyingArray'+self.nestedViewItexm.viewId+'-'+self.nestedViewItexm.viewIdX),
       }
       var states = {
         previousBirthingArrayContainsId: _.indexOf(dataSets.previousBirthingArray, dataSets.tvShowId) === -1 ? false : true,
@@ -41,7 +41,7 @@ if (Meteor.isClient) {
         previousDyingArrayExists: typeof dataSets.previousDyingArray === 'undefined' ? false : true,
 
         setDataArray: function(name,arr){
-          Session.set(name+self.nestedViewItem2.viewId+'-'+self.nestedViewItem2.viewIdX,arr);
+          Session.set(name+self.nestedViewItexm.viewId+'-'+self.nestedViewItexm.viewIdX,arr);
         }
       }
       return $.extend(states, dataSets);
