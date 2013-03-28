@@ -28,6 +28,13 @@ if (Meteor.isClient) {
     "webkitAnimationEnd": function (e, tmpl, x) {
       var self = this;
       Peanuts.animationEndHideShowCleanup(self)
+    },
+    "click .addCharacterButton": function (e, tmpl) {
+      var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
+      var currentTvShowId = this.tvShowObj._id
+      var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
+      currentCharactersArray.push(newCharacter);
+      tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
     }
   }
   Template.genreListPanel.events = {
@@ -48,7 +55,13 @@ if (Meteor.isClient) {
       Peanuts.showHideView(self)
     }
   }
-  
+  Template.tvShowItem.events = {
+    "click .changeNameButton": function (e, tmpl, x) {
+      var newName = ($(e.target).closest('li').find('.changeNameInput').val())
+      tvShowColl.update({'_id':this.tvShowObj._id}, {$set:{name:newName}});
+    }
+  }//asdfasdfasdfa
+
   //})()
 
   Meteor.startup(function () {
@@ -64,17 +77,17 @@ if (Meteor.isClient) {
               this.nestedViewArray= (function(){
                 var k = 0;
                 return [
-                  Peanuts.createAView(self,k++,'tvShowList',
+                  Peanuts.createAView(self,k++,'tvShowList',tvShowColl.find().fetch(),
                     function(self){ return (function(){
                       var k = 0;
                       return [
-                        Peanuts.createAView(self,k++,'characterList',
+                        Peanuts.createAView(self,k++,'characterList',tvShowColl.find().fetch(),
                           function(self){ return (function(){
                             var k = 0;
                             return []
                           })()}
                         ),
-                        Peanuts.createAView(self,k++,'genreList',
+                        Peanuts.createAView(self,k++,'genreList',tvShowColl.find().fetch(),
                           function(self){ return (function(){
                             var k = 0;
                             return []
@@ -83,17 +96,17 @@ if (Meteor.isClient) {
                       ]
                     })()}
                   ),
-                  Peanuts.createAView(self,k++,'tvShowList',
+                  Peanuts.createAView(self,k++,'tvShowList',tvShowColl.find().fetch(),
                     function(self){ return (function(){
                       var k = 0;
                       return [
-                        Peanuts.createAView(self,k++,'characterList',
+                        Peanuts.createAView(self,k++,'characterList',tvShowColl.find().fetch(),
                           function(self){ return (function(){
                             var k = 0;
                             return []
                           })()}
                         ),
-                        Peanuts.createAView(self,k++,'genreList',
+                        Peanuts.createAView(self,k++,'genreList',tvShowColl.find().fetch(),
                           function(self){ return (function(){
                             var k = 0;
                             return []
@@ -105,20 +118,6 @@ if (Meteor.isClient) {
                 ]
               })()
             })()
-          },
-          eventMap: {
-            "click .changeNameButton": function (e, tmpl, x) {
-              var newName = ($(e.target).closest('li').find('.changeNameInput').val())
-              tvShowColl.update({'_id':this.tvShowObj._id}, {$set:{name:newName}});
-            },
-            "click .addCharacterButton": function (e, tmpl) {
-              var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
-              //var currentTvShowId = Session.get('selectedArray'+viewId+'-'+this.nestedViewItem.viewIdX);
-              var currentTvShowId = this.tvShowObj._id
-              var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
-              currentCharactersArray.push(newCharacter);
-              tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
-            }
           }
         }).$el
       );

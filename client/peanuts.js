@@ -78,14 +78,14 @@ var Peanuts = new (function(){
     }
   }
 
-  this.createAView = function(parent,k,includeName,nestedViewArray){
+  this.createAView = function(parent,k,includeName,dataArray,nestedViewArray){
     return new (function(){
       var self = this;
       this.parent = parent;
       this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
       this.includeName = includeName;
       this.viewIdX = this.includeName + (k);
-      this.dataArray = tvShowColl.find().fetch();
+      this.dataArray = dataArray;
       this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
       this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
       this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
