@@ -7,7 +7,7 @@ li(class="#{tvShowObj._id} tvShowItem")
  p(class="showButton showGenres") Show Genres
  div(class="insertTarget") details:
  foreach nestedViewItem.nestedViewArray as nestedViewItem2
-  include 'customButton' exposing nestedViewItem2
+  include 'customButton' exposing nestedViewItem2, tvShowObj
   -var includeName = nestedViewItem2.includeName
   -if(_.indexOf(nestedViewItem2.birthingIdArray, tvShowObj._id) !== -1)
    -xarguments[0].nestedViewItem2 = nestedViewItem2
