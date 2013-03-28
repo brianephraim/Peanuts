@@ -176,6 +176,13 @@ if (Meteor.isClient) {
         animationEndHideShowCleanup(self,'genreList1')
       }
     }
+    Template.customButton.events = {
+      "click": function (e, tmpl, x) {
+        var self = this;
+        console.log(this)
+        //showHideView(self,'characterList0')
+      }
+    }
   //})()
 
   Meteor.startup(function () {
@@ -236,6 +243,7 @@ if (Meteor.isClient) {
           eventMap: {
             "click .showCharacters": function (e, tmpl, x) {
               console.log('click',this)
+              console.log('click e',e)
               var self = this;
               showHideView(self,'characterList0')
             },
