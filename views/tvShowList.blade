@@ -3,5 +3,5 @@ div(class="tvShowView")
  h3 Click show for more details.
  div(class="tvShowList")
   ul
-   foreach nestedViewItem.dataArray as tvShowObj
-    include "tvShowItem" exposing tvShowObj, nestedViewItem
+   foreach nestedViewItem.dataArray as itemDataObj
+    include "tvShowItem" exposing itemDataObj, nestedViewItem

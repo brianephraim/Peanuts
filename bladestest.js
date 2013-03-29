@@ -1,5 +1,6 @@
 
 var tvShowColl = new Meteor.Collection("tvShows");
+var DramaColl = new Meteor.Collection("dramas");
 if(Meteor.isServer) {
   if (tvShowColl.find().count() === 0) {
      var data = [
@@ -23,6 +24,16 @@ if(Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
+  Meteor.subscribe('tvShows', function () {
+    //
+  });
+
+  // Always be subscribed to the todos for the selected list.
+  Meteor.autosubscribe(function () {
+    //var list_id = Session.get('list_id');
+    //if (list_id)
+      //Meteor.subscribe('todos', list_id);
+  });
 
   Template.characterListPanel.events = {
     "webkitAnimationEnd": function (e, tmpl, x) {
@@ -31,7 +42,7 @@ if (Meteor.isClient) {
     },
     "click .addCharacterButton": function (e, tmpl) {
       var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
-      var currentTvShowId = this.tvShowObj._id
+      var currentTvShowId = this.itemDataObj._id
       var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
       currentCharactersArray.push(newCharacter);
       tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
@@ -57,8 +68,8 @@ if (Meteor.isClient) {
   }
   Template.tvShowItem.events = {
     "click .changeNameButton": function (e, tmpl, x) {
-      var newName = ($(e.target).closest('li').find('.changeNameInput').val())
-      tvShowColl.update({'_id':this.tvShowObj._id}, {$set:{name:newName}});
+      var newName = $(e.target).closest('.form').find('.changeNameInput').val();
+      tvShowColl.update({'_id':this.itemDataObj._id}, {$set:{name:newName}});
     }
   }//asdfasdfasdfa
 

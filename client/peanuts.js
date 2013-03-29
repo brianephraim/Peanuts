@@ -1,3 +1,14 @@
+Meteor.subscribe('tvShows', function () {
+  //
+});
+
+// Always be subscribed to the todos for the selected list.
+Meteor.autosubscribe(function () {
+  //var list_id = Session.get('list_id');
+  //if (list_id)
+    //Meteor.subscribe('todos', list_id);
+});
+
 var Peanuts = new (function(){
   this.meteorView = function(options){
     var self = this;
@@ -20,7 +31,7 @@ var Peanuts = new (function(){
 
   this.returnStates = function(self){
     var dataSets = {
-      tvShowId: self.tvShowObj._id,
+      tvShowId: self.itemDataObj._id,
       previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
       previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
       previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),

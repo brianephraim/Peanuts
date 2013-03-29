@@ -1,18 +1,19 @@
-li(class="#{tvShowObj._id} tvShowItem")
- input(type="text", placeholder="change name", class="changeNameInput")
- button(class="changeNameButton") enter
- p(class="tvShowNameYear") Name: #{tvShowObj.name}, Year:  #{tvShowObj.year}
+li(class="#{itemDataObj._id} tvShowItem")
+ .form
+  input(type="text", placeholder="change name", class="changeNameInput")
+  button(class="changeNameButton") enter
+ p(class="tvShowNameYear") Name: #{itemDataObj.name}, Year:  #{itemDataObj.year}
  div(class="insertTarget") details:
  foreach nestedViewItem.nestedViewArray as nestedViewItem
   -var dynamicIncludeName = nestedViewItem.includeName + 'Button'
-  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, tvShowObj
+  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj
   -var includeName = nestedViewItem.includeName
-  -if(_.indexOf(nestedViewItem.birthingIdArray, tvShowObj._id) !== -1)
+  -if(_.indexOf(nestedViewItem.birthingIdArray, itemDataObj._id) !== -1)
    -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, tvShowObj
-  -else if(_.indexOf(nestedViewItem.dyingIdArray, tvShowObj._id) !== -1)
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj
+  -else if(_.indexOf(nestedViewItem.dyingIdArray, itemDataObj._id) !== -1)
    -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, tvShowObj
-  -else if(_.indexOf(nestedViewItem.selectedIdArray, tvShowObj._id) !== -1)
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj
+  -else if(_.indexOf(nestedViewItem.selectedIdArray, itemDataObj._id) !== -1)
    -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, tvShowObj
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj
