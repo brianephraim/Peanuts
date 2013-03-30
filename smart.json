@@ -1,6 +1,7 @@
 {
   "packages": {
     "moment": {},
-    "blade": {}
+    "blade": {},
+    "mongodb-aggregation": {}
   }
 }

@@ -1,15 +1,16 @@
 -var insertStyle = '';
--if(_.indexOf(nestedViewItem.dyingIdArray, itemDataObj._id) !== -1)
- -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
--else if(_.indexOf(nestedViewItem.birthingIdArray, itemDataObj._id) !== -1)
- -insertStyle = 'opacityx: 0;'+Peanuts.animations.appear();
+-if(nestedViewItem.dataArray === 'childItemDataObj')
+ -var forEachArray = itemDataObj.genres;
+ -if(animationState ==='dying')
+  -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
+ -else if(animationState ==='birthing')
+  -insertStyle = 'opacityx: 0;'+Peanuts.animations.appear();
 -else
- -insertStyle = ''
+ -var forEachArray = nestedViewItem.dataArray;
 div(class='characterList', style=insertStyle)
  h4 Genres
- -if(typeof itemDataObj !== 'undefined')
-  ul
-   foreach itemDataObj.genres as genre
-    include "genreListItem" exposing genre
-  input(type="text", placeholder="add character", class="addCharacterInput")
-  button(class="addCharacterButton") enter
+ ul
+  foreach forEachArray as genre
+   include "genreListItem" exposing genre
+ input(type="text", placeholder="add character", class="addCharacterInput")
+ button(class="addCharacterButton") enter

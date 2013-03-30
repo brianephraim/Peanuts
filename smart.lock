@@ -7,7 +7,8 @@
   "dependencies": {
     "basePackages": {
       "moment": {},
-      "blade": {}
+      "blade": {},
+      "mongodb-aggregation": {}
     },
     "packages": {
       "moment": {
@@ -19,6 +20,11 @@
         "git": "https://github.com/bminer/node-blade.git",
         "tag": "v3.0.3",
         "commit": "30e8c96e19afbda6c03d07250c4cc2fa63daec76"
+      },
+      "mongodb-aggregation": {
+        "git": "https://github.com/jhoxray/meteor-mongo-extensions.git",
+        "tag": "v0.1.5",
+        "commit": "54579b8a35fc59939995c63af26305024ed3bdad"
       }
     }
   }

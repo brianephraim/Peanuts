@@ -1,6 +1,6 @@
 -var insertStyle = '';
 -if(nestedViewItem.dataArray === 'childItemDataObj')
- -var forEachArray = itemDataObj.characters;
+ -var forEachArray = itemDataObj.tvShows;
  -if(animationState ==='dying')
   -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
  -else if(animationState ==='birthing')
@@ -8,9 +8,9 @@
 -else
  -var forEachArray = nestedViewItem.dataArray;
 div(class='characterList', style=insertStyle)
- h4 Characters
+ h4 TV shows
  ul
-  foreach forEachArray as character
-   include "characterListItem" exposing character
+  foreach forEachArray as itemDataObj
+   include "tvShowListItem" exposing itemDataObj, nestedViewItem
  input(type="text", placeholder="add character", class="addCharacterInput")
  button(class="addCharacterButton") enter

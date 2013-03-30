@@ -1,13 +1,4 @@
-Meteor.subscribe('tvShows', function () {
-  //
-});
 
-// Always be subscribed to the todos for the selected list.
-Meteor.autosubscribe(function () {
-  //var list_id = Session.get('list_id');
-  //if (list_id)
-    //Meteor.subscribe('todos', list_id);
-});
 
 var Peanuts = new (function(){
   this.meteorView = function(options){
@@ -89,18 +80,37 @@ var Peanuts = new (function(){
     }
   }
 
-  this.createAView = function(parent,k,includeName,dataArray,nestedViewArray){
+  this.createAView = function(options,parent,k,includeName,dataArray,nestedViewArray){
     return new (function(){
       var self = this;
-      this.parent = parent;
+      var defaults = {
+        parent:'x',
+        k:0,
+        includeName:'',
+        dataArray:'childItemDataObj',
+        returnNestedViewArray:function(self){ return (function(){
+          var k = 0;
+          return []
+        })()}
+      };
+      var settings = $.extend({}, defaults, options); 
+      this.parent = settings.parent;
       this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
-      this.includeName = includeName;
-      this.viewIdX = this.includeName + (k);
-      this.dataArray = dataArray;
+      this.includeName = settings.includeName;
+      this.viewIdX = this.includeName + (settings.k);
+      if(settings.dataArray === 'inherit'){
+        this.dataArray = this.parent.dataArray;
+      } else if(settings.dataArray === 'childItemDataObj'){
+        this.dataArray = 'childItemDataObj';
+      }else if(settings.dataArray === 'empty'){
+        this.dataArray = [];
+      } else {
+        this.dataArray = settings.dataArray;
+      }
       this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);
       this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);
       this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
-      this.nestedViewArray = nestedViewArray(self)
+      this.nestedViewArray = settings.returnNestedViewArray(self)
     })();
   }
   this.animationEndHideShowCleanup = function(self,viewNameWithIndex){
@@ -113,6 +123,24 @@ var Peanuts = new (function(){
       s.previousDyingArray.splice(_.indexOf(s.previousDyingArray, s.tvShowId),1)
       s.setDataArray('dyingArray',s.previousDyingArray)
     }
+  }
+  this.returnDistinctTagsArray = function(cursor,itemTagArray){
+    var returnArray = [];
+    cursor.forEach(function(item){
+      if(typeof item[itemTagArray] === 'string'){
+        if(_.indexOf(returnArray, item[itemTagArray]) === -1){
+            returnArray.push(item[itemTagArray])
+          }
+      } else {
+        for(var i = 0, l = item[itemTagArray].length; i < l; i++){
+          if(_.indexOf(returnArray, item[itemTagArray][i]) === -1){
+            returnArray.push(item[itemTagArray][i])
+          }
+        }
+      }
+      
+    })
+    return returnArray
   }
 
 

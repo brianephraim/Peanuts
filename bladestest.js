@@ -1,6 +1,8 @@
 
 var tvShowColl = new Meteor.Collection("tvShows");
-var DramaColl = new Meteor.Collection("dramas");
+
+
+
 if(Meteor.isServer) {
   if (tvShowColl.find().count() === 0) {
      var data = [
@@ -24,16 +26,7 @@ if(Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  Meteor.subscribe('tvShows', function () {
-    //
-  });
-
-  // Always be subscribed to the todos for the selected list.
-  Meteor.autosubscribe(function () {
-    //var list_id = Session.get('list_id');
-    //if (list_id)
-      //Meteor.subscribe('todos', list_id);
-  });
+  Meteor.subscribe('tvShows', function () {});
 
   Template.characterListPanel.events = {
     "webkitAnimationEnd": function (e, tmpl, x) {
@@ -66,7 +59,7 @@ if (Meteor.isClient) {
       Peanuts.showHideView(self)
     }
   }
-  Template.tvShowItem.events = {
+  Template.tvShowListItem.events = {
     "click .changeNameButton": function (e, tmpl, x) {
       var newName = $(e.target).closest('.form').find('.changeNameInput').val();
       tvShowColl.update({'_id':this.itemDataObj._id}, {$set:{name:newName}});
@@ -74,6 +67,7 @@ if (Meteor.isClient) {
   }//asdfasdfasdfa
 
   //})()
+  tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
 
   Meteor.startup(function () {
     return (function(){
@@ -88,44 +82,66 @@ if (Meteor.isClient) {
               this.nestedViewArray= (function(){
                 var k = 0;
                 return [
-                  Peanuts.createAView(self,k++,'tvShowList',tvShowColl.find().fetch(),
-                    function(self){ return (function(){
+                  Peanuts.createAView({
+                    parent:self,
+                    k:k++,
+                    includeName:'genreListPanel',
+                    dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'genres')
+                  }),
+                  Peanuts.createAView({
+                    parent:self,
+                    k:k++,
+                    includeName:'characterListPanel',
+                    dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'characters')
+                  }),
+                  Peanuts.createAView({
+                    parent:self,
+                    k:k++,
+                    includeName:'tvShowListPanel',
+                    dataArray:tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
+                  }),
+                  Peanuts.createAView({
+                    parent:self,
+                    k:k++,
+                    includeName:'tvShowListPanel',
+                    dataArray:tvShowColl.find().fetch(),
+                    returnNestedViewArray:function(self){ return (function(){
                       var k = 0;
                       return [
-                        Peanuts.createAView(self,k++,'characterList',tvShowColl.find().fetch(),
-                          function(self){ return (function(){
-                            var k = 0;
-                            return []
-                          })()}
-                        ),
-                        Peanuts.createAView(self,k++,'genreList',tvShowColl.find().fetch(),
-                          function(self){ return (function(){
-                            var k = 0;
-                            return []
-                          })()}
-                        )
+                        Peanuts.createAView({
+                          parent:self,
+                          k:k++,
+                          includeName:'characterList'
+                        }),
+                        Peanuts.createAView({
+                          parent:self,
+                          k:k++,
+                          includeName:'genreList'
+                        })
                       ]
                     })()}
-                  ),
-                  Peanuts.createAView(self,k++,'tvShowList',tvShowColl.find().fetch(),
-                    function(self){ return (function(){
+                  }),//
+                  Peanuts.createAView({
+                    parent:self,
+                    k:k++,
+                    includeName:'tvShowListPanel',
+                    dataArray:tvShowColl.find().fetch(),
+                    returnNestedViewArray:function(self){ return (function(){
                       var k = 0;
                       return [
-                        Peanuts.createAView(self,k++,'characterList',tvShowColl.find().fetch(),
-                          function(self){ return (function(){
-                            var k = 0;
-                            return []
-                          })()}
-                        ),
-                        Peanuts.createAView(self,k++,'genreList',tvShowColl.find().fetch(),
-                          function(self){ return (function(){
-                            var k = 0;
-                            return []
-                          })()}
-                        )
+                        Peanuts.createAView({
+                          parent:self,
+                          k:k++,
+                          includeName:'characterList'
+                        }),
+                        Peanuts.createAView({
+                          parent:self,
+                          k:k++,
+                          includeName:'genreList'
+                        })
                       ]
                     })()}
-                  )
+                  }),//
                 ]
               })()
             })()
