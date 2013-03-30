@@ -4,19 +4,4 @@ li(class="#{itemDataObj._id} tvShowListItem")
   button(class="changeNameButton") enter
  p(class="tvShowNameYear") Name: #{itemDataObj.name}, Year:  #{itemDataObj.year}
  div(class="insertTarget") details:
- foreach nestedViewItem.nestedViewArray as nestedViewItem
-  -var dynamicIncludeName = nestedViewItem.includeName + 'Button'
-  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj
-  -var includeName = nestedViewItem.includeName
-  -if(_.indexOf(nestedViewItem.dyingIdArray, itemDataObj._id) !== -1)
-   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
-   -var animationState = 'dying';
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState
-  -else if(_.indexOf(nestedViewItem.birthingIdArray, itemDataObj._id) !== -1)
-   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
-   -var animationState = 'birthing';
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState
-  -else if(_.indexOf(nestedViewItem.selectedIdArray, itemDataObj._id) !== -1)
-   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel';
-   -var animationState = 'selected';
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState
+ include 'buildButtonPlusListComplex.blade'

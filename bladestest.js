@@ -27,7 +27,12 @@ if(Meteor.isServer) {
 
 if (Meteor.isClient) {
   Meteor.subscribe('tvShows', function () {});
-
+  Template.tvShowListButton.events = {
+    "click": function (e, tmpl, x) {
+      var self = this;
+      Peanuts.showHideView2(self)
+    }
+  }
   Template.characterListPanel.events = {
     "webkitAnimationEnd": function (e, tmpl, x) {
       var self = this;
@@ -92,7 +97,18 @@ if (Meteor.isClient) {
                     parent:self,
                     k:k++,
                     includeName:'characterListPanel',
-                    dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'characters')
+                    dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'characters'),
+                    returnNestedViewArray:function(self){ return (function(){
+                      var k = 0;
+                      return [
+                        Peanuts.createAView({
+                          parent:self,
+                          k:k++,
+                          includeName:'tvShowList',
+                          dataArray:tvShowColl.find().fetch()
+                        })
+                      ]
+                    })()}
                   }),
                   Peanuts.createAView({
                     parent:self,

@@ -42,7 +42,65 @@ var Peanuts = new (function(){
     }
     return $.extend(states, dataSets);
   }
+  this.returnStates2 = function(self){
+    console.log(self)
+    var dataSets = {
+      tvShowId: self.itemDataObj._id,
+      previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+      previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+      previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
+    }
+    var states = {
+      previousBirthingArrayContainsId: _.indexOf(dataSets.previousBirthingArray, dataSets.tvShowId) === -1 ? false : true,
+      previousSelectedArrayContainsId: _.indexOf(dataSets.previousSelectedArray, dataSets.tvShowId) === -1 ? false : true,
+      previousDyingArrayContainsId: _.indexOf(dataSets.previousDyingArray, dataSets.tvShowId) === -1 ? false : true,
 
+      previousBirthingArrayExists: typeof dataSets.previousBirthingArray === 'undefined' ? false : true,
+      previousSelectedArrayExists: typeof dataSets.previousSelectedArray === 'undefined' ? false : true,
+      previousDyingArrayExists: typeof dataSets.previousDyingArray === 'undefined' ? false : true,
+
+      setDataArray: function(name,arr){
+        Session.set(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX,arr);
+      }
+    }
+    return $.extend(states, dataSets);
+  }
+  this.showHideView2 = function(self){
+    var s = Peanuts.returnStates2(self);
+    //Add to selected when appropriate
+    if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){
+      s.previousSelectedArray.push(s.tvShowId)
+      s.setDataArray('selectedArray',s.previousSelectedArray)
+    }
+    if(!s.previousSelectedArrayExists){
+      s.previousSelectedArray = [s.tvShowId]
+      s.setDataArray('selectedArray',s.previousSelectedArray)
+    }
+
+    //Add to birthing when appropriate
+    if(s.previousBirthingArrayExists && !s.previousBirthingArrayContainsId){
+      s.previousBirthingArray.push(s.tvShowId)
+      s.setDataArray('birthingArray',s.previousBirthingArray)
+    }
+    if(!s.previousBirthingArrayExists){
+      s.setDataArray('birthingArray',[s.tvShowId])
+    }
+
+    //Make an existing characterList disappear
+    if(
+      (s.previousSelectedArrayExists && s.previousSelectedArrayContainsId) && 
+      (!s.previousBirthingArrayExists || !s.previousBirthingArrayContainsId)
+    ){
+      s.previousSelectedArray.splice(_.indexOf(s.previousSelectedArray, s.tvShowId),1)
+      if(s.previousDyingArrayExists && !s.previousDyingArrayContainsId){
+        s.previousDyingArray.push(s.tvShowId)
+      } else {
+        s.previousDyingArray = [s.tvShowId];
+      }
+      s.setDataArray('selectedArray',s.previousSelectedArray)
+      s.setDataArray('dyingArray',s.previousDyingArray)
+    }
+  }
   this.showHideView = function(self){
     var s = Peanuts.returnStates(self);
     //Add to selected when appropriate
