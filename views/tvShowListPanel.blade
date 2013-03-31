@@ -1,4 +1,5 @@
 -var insertStyle = '';
+-var category = 'tvShows'
 -if(animationState ==='dying')
  -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
 -else if(animationState ==='birthing')
@@ -6,7 +7,7 @@
 -if(typeof dataArrayProcessed !== 'undefined')
  -var forEachArray = dataArrayProcessed;
 -else if(nestedViewItem.dataArray === 'childItemDataObj')
- -var forEachArray = itemDataObj.tvShows;
+ -var forEachArray = itemDataObj[category];
 -else
  -var forEachArray = nestedViewItem.dataArray;
 div(class='basicListPanel', style=insertStyle)
@@ -14,6 +15,6 @@ div(class='basicListPanel', style=insertStyle)
  ul
   foreach forEachArray as itemDataObj
    -var selectedIdentifier = itemDataObj._id;
-   include "tvShowListItem" exposing itemDataObj, nestedViewItem, selectedIdentifier
+   include "tvShowListItem" exposing itemDataObj, category, nestedViewItem, selectedIdentifier
  input(type="text", placeholder="add character", class="addCharacterInput")
  button(class="addCharacterButton") enter
