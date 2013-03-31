@@ -12,6 +12,7 @@ div(class='characterList', style=insertStyle)
  h4 Characters
  ul
   foreach forEachArray as itemDataObj
-   include "characterListItem" exposing itemDataObj, category, nestedViewItem
+   -var selectedIdentifier = itemDataObj;
+   include "characterListItem" exposing itemDataObj, category, nestedViewItem, selectedIdentifier
  input(type="text", placeholder="add itemDataObj", class="addCharacterInput")
  button(class="addCharacterButton") enter

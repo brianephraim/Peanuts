@@ -30,7 +30,13 @@ if (Meteor.isClient) {
   Template.tvShowListButton.events = {
     "click": function (e, tmpl, x) {
       var self = this;
-      Peanuts.showHideView2(self)
+      Peanuts.showHideView(self)
+    }
+  }
+  Template.tvShowListPanel.events = {
+    "webkitAnimationEnd": function (e, tmpl, x) {
+      var self = this;
+      Peanuts.animationEndHideShowCleanup2(self)
     }
   }
   Template.characterListPanel.events = {
@@ -90,12 +96,6 @@ if (Meteor.isClient) {
                   Peanuts.createAView({
                     parent:self,
                     k:k++,
-                    includeName:'genreListPanel',
-                    dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'genres')
-                  }),
-                  Peanuts.createAView({
-                    parent:self,
-                    k:k++,
                     includeName:'characterListPanel',
                     dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'characters'),
                     returnNestedViewArray:function(self){ return (function(){
@@ -109,6 +109,13 @@ if (Meteor.isClient) {
                         })
                       ]
                     })()}
+                  }),
+                  /*
+                  Peanuts.createAView({
+                    parent:self,
+                    k:k++,
+                    includeName:'genreListPanel',
+                    dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'genres')
                   }),
                   Peanuts.createAView({
                     parent:self,
@@ -157,7 +164,7 @@ if (Meteor.isClient) {
                         })
                       ]
                     })()}
-                  }),//
+                  }),// */
                 ]
               })()
             })()

@@ -11,6 +11,7 @@ div(class='characterList', style=insertStyle)
  h4 Genres
  ul
   foreach forEachArray as genre
-   include "genreListItem" exposing genre
+   -var selectedIdentifier = genre;
+   include "genreListItem" exposing genre, selectedIdentifier
  input(type="text", placeholder="add character", class="addCharacterInput")
  button(class="addCharacterButton") enter

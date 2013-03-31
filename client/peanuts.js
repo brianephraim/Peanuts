@@ -22,7 +22,7 @@ var Peanuts = new (function(){
 
   this.returnStates = function(self){
     var dataSets = {
-      tvShowId: self.itemDataObj._id,
+      tvShowId: self.selectedIdentifier,
       previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
       previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
       previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
@@ -42,42 +42,9 @@ var Peanuts = new (function(){
     }
     return $.extend(states, dataSets);
   }
-  this.returnStates2 = function(self){
-    console.log(self)
-    console.log(self.itemDataObj)
-    console.log(self.category)
-    console.log(self.nestedViewItem.dataArray)
-    var containsItemDataObjArray = []
-    for(var i = 0, l= self.nestedViewItem.dataArray.length; i < l; i++){
-      if(_.indexOf(self.nestedViewItem.dataArray[i][self.category], self.itemDataObj) !== -1){
-        console.log(self.nestedViewItem.dataArray[i])
-        containsItemDataObjArray.push(self.nestedViewItem.dataArray[i][self.category])
-      }
-    }
-    console.log(containsItemDataObjArray)
-    var dataSets = {
-      tvShowId: self.itemDataObj._id,
-      previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
-      previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
-      previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
-    }
-    var states = {
-      previousBirthingArrayContainsId: _.indexOf(dataSets.previousBirthingArray, dataSets.tvShowId) === -1 ? false : true,
-      previousSelectedArrayContainsId: _.indexOf(dataSets.previousSelectedArray, dataSets.tvShowId) === -1 ? false : true,
-      previousDyingArrayContainsId: _.indexOf(dataSets.previousDyingArray, dataSets.tvShowId) === -1 ? false : true,
 
-      previousBirthingArrayExists: typeof dataSets.previousBirthingArray === 'undefined' ? false : true,
-      previousSelectedArrayExists: typeof dataSets.previousSelectedArray === 'undefined' ? false : true,
-      previousDyingArrayExists: typeof dataSets.previousDyingArray === 'undefined' ? false : true,
-
-      setDataArray: function(name,arr){
-        Session.set(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX,arr);
-      }
-    }
-    return $.extend(states, dataSets);
-  }
   this.showHideView2 = function(self){
-    var s = Peanuts.returnStates2(self);
+    var s = Peanuts.returnStates(self);
     //Add to selected when appropriate
     if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){
       s.previousSelectedArray.push(s.tvShowId)
@@ -181,6 +148,17 @@ var Peanuts = new (function(){
       this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);
       this.nestedViewArray = settings.returnNestedViewArray(self)
     })();
+  }
+  this.animationEndHideShowCleanup2 = function(self,viewNameWithIndex){
+    var s = Peanuts.returnStates(self);
+    if(s.previousBirthingArrayExists && s.previousBirthingArrayContainsId){
+      s.previousBirthingArray.splice(_.indexOf(s.previousBirthingArray, s.tvShowId),1)
+      s.setDataArray('birthingArray',s.previousBirthingArray)
+    }
+    if(s.previousDyingArrayExists && s.previousDyingArrayContainsId){
+      s.previousDyingArray.splice(_.indexOf(s.previousDyingArray, s.tvShowId),1)
+      s.setDataArray('dyingArray',s.previousDyingArray)
+    }
   }
   this.animationEndHideShowCleanup = function(self,viewNameWithIndex){
     var s = Peanuts.returnStates(self);

@@ -1,16 +1,21 @@
+-console.log(dataArrayProcessed)
 -var insertStyle = '';
--if(nestedViewItem.dataArray === 'childItemDataObj')
+-if(animationState ==='dying')
+ -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
+-else if(animationState ==='birthing')
+ -insertStyle = 'opacityx: 0;'+Peanuts.animations.appear();
+-if(typeof dataArrayProcessed !== 'undefined')
+ -var forEachArray = dataArrayProcessed;
+-else if(nestedViewItem.dataArray === 'childItemDataObj')
  -var forEachArray = itemDataObj.tvShows;
- -if(animationState ==='dying')
-  -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
- -else if(animationState ==='birthing')
-  -insertStyle = 'opacityx: 0;'+Peanuts.animations.appear();
 -else
+ -console.log('asdfasdf')
  -var forEachArray = nestedViewItem.dataArray;
 div(class='characterList', style=insertStyle)
  h4 TV shows
  ul
   foreach forEachArray as itemDataObj
-   include "tvShowListItem" exposing itemDataObj, nestedViewItem
+   -var selectedIdentifier = itemDataObj._id;
+   include "tvShowListItem" exposing itemDataObj, nestedViewItem, selectedIdentifier
  input(type="text", placeholder="add character", class="addCharacterInput")
  button(class="addCharacterButton") enter
