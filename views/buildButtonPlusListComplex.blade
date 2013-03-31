@@ -1,27 +1,29 @@
--if(typeof category ==='undefined')
- -var category = '';
--var dataArrayProcessed = '';
-foreach nestedViewItem.nestedViewArray as nestedViewItem
- -if(category !== '')
-  -var containsItemDataObjArray = []
-  -for(var i = 0, l= nestedViewItem.dataArray.length; i < l; i++){
-   -if(_.indexOf(nestedViewItem.dataArray[i][category], itemDataObj) !== -1){
-    -containsItemDataObjArray.push(nestedViewItem.dataArray[i])
+-if(typeof nestedViewItem !=='undefined')
+ -console.log(nestedViewItem)
+ -if(typeof category ==='undefined')
+  -var category = '';
+ -var dataArrayProcessed = '';
+ foreach nestedViewItem.nestedViewArray as nestedViewItem
+  -if(category !== '')
+   -var containsItemDataObjArray = []
+   -for(var i = 0, l= nestedViewItem.dataArray.length; i < l; i++){
+    -if(_.indexOf(nestedViewItem.dataArray[i][category], itemDataObj) !== -1){
+     -containsItemDataObjArray.push(nestedViewItem.dataArray[i])
+    -}
    -}
-  -}
-  -var dataArrayProcessed = containsItemDataObjArray;
- -var dynamicIncludeName = nestedViewItem.includeName + 'Button'
- include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, category, dataArrayProcessed, selectedIdentifier
- -var includeName = nestedViewItem.includeName
- -if(_.indexOf(nestedViewItem.dyingIdArray, selectedIdentifier) !== -1)
-  -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
-  -var animationState = 'dying';
-  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier
- -else if(_.indexOf(nestedViewItem.birthingIdArray, selectedIdentifier) !== -1)
-  -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
-  -var animationState = 'birthing';
-  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier
- -else if(_.indexOf(nestedViewItem.selectedIdArray, selectedIdentifier) !== -1)
-  -var dynamicIncludeName = nestedViewItem.includeName + 'Panel';
-  -var animationState = 'selected';
-  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier
+   -var dataArrayProcessed = containsItemDataObjArray;
+  -var dynamicIncludeName = nestedViewItem.includeName + 'Button'
+  include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, category, dataArrayProcessed, selectedIdentifier
+  -var includeName = nestedViewItem.includeName
+  -if(_.indexOf(nestedViewItem.dyingIdArray, selectedIdentifier) !== -1)
+   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
+   -var animationState = 'dying';
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier
+  -else if(_.indexOf(nestedViewItem.birthingIdArray, selectedIdentifier) !== -1)
+   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'
+   -var animationState = 'birthing';
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier
+  -else if(_.indexOf(nestedViewItem.selectedIdArray, selectedIdentifier) !== -1)
+   -var dynamicIncludeName = nestedViewItem.includeName + 'Panel';
+   -var animationState = 'selected';
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier

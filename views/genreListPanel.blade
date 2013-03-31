@@ -1,17 +1,18 @@
 -var insertStyle = '';
+-var category = 'genres'
 -if(nestedViewItem.dataArray === 'childItemDataObj')
- -var forEachArray = itemDataObj.genres;
+ -var forEachArray = itemDataObj[category];
  -if(animationState ==='dying')
   -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
  -else if(animationState ==='birthing')
   -insertStyle = 'opacityx: 0;'+Peanuts.animations.appear();
 -else
  -var forEachArray = nestedViewItem.dataArray;
-div(class='characterList', style=insertStyle)
+div(class='basicListPanel', style=insertStyle)
  h4 Genres
  ul
-  foreach forEachArray as genre
-   -var selectedIdentifier = genre;
-   include "genreListItem" exposing genre, selectedIdentifier
+  foreach forEachArray as itemDataObj
+   -var selectedIdentifier = itemDataObj;
+   include "genreListItem" exposing itemDataObj, selectedIdentifier
  input(type="text", placeholder="add character", class="addCharacterInput")
  button(class="addCharacterButton") enter

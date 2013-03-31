@@ -1,6 +1,12 @@
 div(class="rootViewWrapper")
- foreach nestedViewArray as nestedViewItem
-  div
+ header
+  h1 Welcome to Peanut
+  h2 A framework for Meteor
+ section.mainSection
+  foreach nestedViewArray as nestedViewItem
    -var animationState = '';
    -var dynamicIncludeName = nestedViewItem.includeName
    include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, animationState
+ footer
+  p
+   a(href="https://github.com/defualt/Peanuts") find Peanuts on GitHub

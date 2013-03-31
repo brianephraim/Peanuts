@@ -1,7 +1,7 @@
-li(class="#{itemDataObj._id} tvShowListItem")
+li(class="#{itemDataObj._id} basicListItem")
  .form
   input(type="text", placeholder="change name", class="changeNameInput")
   button(class="changeNameButton") enter
  p(class="tvShowNameYear") Name: #{itemDataObj.name}, Year:  #{itemDataObj.year}
  div(class="insertTarget") details:
- include 'buildButtonPlusListComplex.blade'
+ include 'buildButtonPlusListComplex'
