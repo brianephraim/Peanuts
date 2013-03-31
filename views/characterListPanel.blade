@@ -1,6 +1,7 @@
 -var insertStyle = '';
+-var category = 'characters'
 -if(nestedViewItem.dataArray === 'childItemDataObj')
- -var forEachArray = itemDataObj.characters;
+ -var forEachArray = itemDataObj[category];
  -if(animationState ==='dying')
   -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
  -else if(animationState ==='birthing')
@@ -11,6 +12,6 @@ div(class='characterList', style=insertStyle)
  h4 Characters
  ul
   foreach forEachArray as itemDataObj
-   include "characterListItem" exposing itemDataObj, nestedViewItem
+   include "characterListItem" exposing itemDataObj, category, nestedViewItem
  input(type="text", placeholder="add itemDataObj", class="addCharacterInput")
  button(class="addCharacterButton") enter

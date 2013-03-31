@@ -44,6 +44,17 @@ var Peanuts = new (function(){
   }
   this.returnStates2 = function(self){
     console.log(self)
+    console.log(self.itemDataObj)
+    console.log(self.category)
+    console.log(self.nestedViewItem.dataArray)
+    var containsItemDataObjArray = []
+    for(var i = 0, l= self.nestedViewItem.dataArray.length; i < l; i++){
+      if(_.indexOf(self.nestedViewItem.dataArray[i][self.category], self.itemDataObj) !== -1){
+        console.log(self.nestedViewItem.dataArray[i])
+        containsItemDataObjArray.push(self.nestedViewItem.dataArray[i][self.category])
+      }
+    }
+    console.log(containsItemDataObjArray)
     var dataSets = {
       tvShowId: self.itemDataObj._id,
       previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),
