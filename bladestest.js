@@ -9,13 +9,13 @@ if(Meteor.isServer) {
         {
            name:'Game of Thrones',
            year:'2011',
-           characters: ['Jon Snow','Tyrion Lannister','Daenerys Targaryen'],
+           characters: ['Jon Snow','Tyrion Lannister','Daenerys Targaryen','Detective Munch'],
            genres: ['Adventure','Drama','Fantasy']
         },
         {
            name:'The Walking Dead',
            year:'2010',
-           characters: ['Rick Grimes','Daryl Dixon','Glenn Rhee'],
+           characters: ['Rick Grimes','Detective Munch','Daryl Dixon','Glenn Rhee'],
            genres: ['Drama','Horror','Thriller']
         }
      ]
@@ -110,7 +110,7 @@ if (Meteor.isClient) {
                       ]
                     })()}
                   }),
-                  /*
+                  
                   Peanuts.createAView({
                     parent:self,
                     k:k++,
@@ -164,7 +164,7 @@ if (Meteor.isClient) {
                         })
                       ]
                     })()}
-                  }),// */
+                  }),// /**/
                 ]
               })()
             })()

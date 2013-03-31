@@ -1,5 +1,6 @@
 div(class="rootViewWrapper")
  foreach nestedViewArray as nestedViewItem
   div
+   -var animationState = '';
    -var dynamicIncludeName = nestedViewItem.includeName
-   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem
+   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, animationState

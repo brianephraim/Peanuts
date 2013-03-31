@@ -1,6 +1,8 @@
+-if(typeof category ==='undefined')
+ -var category = '';
 -var dataArrayProcessed = '';
 foreach nestedViewItem.nestedViewArray as nestedViewItem
- -if(typeof category !=='undefined')
+ -if(category !== '')
   -var containsItemDataObjArray = []
   -for(var i = 0, l= nestedViewItem.dataArray.length; i < l; i++){
    -if(_.indexOf(nestedViewItem.dataArray[i][category], itemDataObj) !== -1){
