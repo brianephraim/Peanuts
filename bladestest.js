@@ -30,6 +30,7 @@ if (Meteor.isClient) {
   Template.tvShowListButton.events = {
     "click": function (e, tmpl, x) {
       var self = this;
+      console.log(this)
       Peanuts.showHideView(self)
     }
   }
@@ -80,6 +81,46 @@ if (Meteor.isClient) {
   //})()
   tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
 
+
+  var tvMega = function(){return{/*start*/
+    includeName:'tvShowList',
+    dataArray:tvShowColl.find().fetch(),
+    returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
+      [
+        {
+          includeName:'characterList',
+          dataArray:'childItemDataObj',
+          returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
+            [
+              {
+                includeName:'tvShowList',
+                dataArray:tvShowColl.find().fetch(),
+                returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
+                  []
+                )
+              }
+            ]
+          )
+        },
+        {
+          includeName:'genreList',
+          dataArray:'childItemDataObj',
+          returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
+            [
+              {
+                includeName:'tvShowList',
+                dataArray:tvShowColl.find().fetch(),
+                returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
+                  []
+                )
+              }
+            ]
+          )
+        },
+      ]
+    )
+  }}/*end*/
+
   Meteor.startup(function () {
     return (function(){
       $('body').append(
@@ -96,19 +137,13 @@ if (Meteor.isClient) {
                   Peanuts.createAView({
                     parent:self,
                     k:k++,
-                    includeName:'characterListPanel',
+                    includeName:'characterList',
                     dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'characters'),
-                    returnNestedViewArray:function(self){ return (function(){
-                      var k = 0;
-                      return [
-                        Peanuts.createAView({
-                          parent:self,
-                          k:k++,
-                          includeName:'tvShowList',
-                          dataArray:tvShowColl.find().fetch()
-                        })
+                    returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
+                      [
+                        tvMega()
                       ]
-                    })()}
+                    )
                   }),
                   
                   Peanuts.createAView({

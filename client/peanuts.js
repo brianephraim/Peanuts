@@ -149,6 +149,22 @@ var Peanuts = new (function(){
       this.nestedViewArray = settings.returnNestedViewArray(self)
     })();
   }
+  this.createReturnNestedViewArray = function(self,viewOptionSetsArray){ return function(self){ return (function(){
+    var k = 0;
+    var returnArray = [];
+    for(var i = 0, l = viewOptionSetsArray.length; i < l; i++){
+      returnArray.push(
+        Peanuts.createAView({
+          parent:self,
+          k:k++,
+          includeName:viewOptionSetsArray[i].includeName,
+          dataArray:viewOptionSetsArray[i].dataArray,
+          returnNestedViewArray:viewOptionSetsArray[i].returnNestedViewArray
+        })
+      )
+    }
+    return returnArray
+  })()}}
   this.animationEndHideShowCleanup2 = function(self,viewNameWithIndex){
     var s = Peanuts.returnStates(self);
     if(s.previousBirthingArrayExists && s.previousBirthingArrayContainsId){
