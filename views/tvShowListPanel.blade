@@ -1,20 +1,5 @@
--var insertStyle = '';
--var category = 'tvShows'
--if(animationState ==='dying')
- -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
--else if(animationState ==='birthing')
- -insertStyle = 'opacityx: 0;'+Peanuts.animations.appear();
--if(typeof dataArrayProcessed !== 'undefined')
- -var forEachArray = dataArrayProcessed;
--else if(nestedViewItem.dataArray === 'childItemDataObj')
- -var forEachArray = itemDataObj[category];
--else
- -var forEachArray = nestedViewItem.dataArray;
-div(class='basicListPanel', style=insertStyle)
- h4 TV shows
- ul
-  foreach forEachArray as itemDataObj
-   -var selectedIdentifier = itemDataObj._id;
-   include "tvShowListItem" exposing itemDataObj, category, nestedViewItem, selectedIdentifier
- input(type="text", placeholder="add character", class="addCharacterInput")
- button(class="addCharacterButton") enter
+-arguments[0].h4Text = 'TV shows';
+-arguments[0].category = 'tvShows';
+-arguments[0].includeItemBlade = 'tvShowListItem';
+-arguments[0].identifyingAttribute = '_id'
+include 'basicListPanel'

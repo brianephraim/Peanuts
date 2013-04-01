@@ -1,0 +1,23 @@
+-var insertStyle = '';
+-if(animationState ==='dying')
+ -insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
+-else if(animationState ==='birthing')
+ -insertStyle = 'opacityx: 0;'+Peanuts.animations.appear();
+-if(typeof dataArrayProcessed !== 'undefined')
+ -var forEachArray = dataArrayProcessed;
+-else if(nestedViewItem.dataArray === 'childItemDataObj')
+ -var forEachArray = itemDataObj[category];
+-else
+ -var forEachArray = nestedViewItem.dataArray;
+div(class='basicListPanel', style=insertStyle)
+ h4 #{h4Text}
+ ul
+  foreach forEachArray as itemDataObj
+   -if(typeof itemDataObj === 'string')
+    -var selectedIdentifier = itemDataObj;
+   -else
+    -var selectedIdentifier = itemDataObj[identifyingAttribute];
+   -var dynamicIncludeName = includeItemBlade;
+   include 'dynamicInclude' exposing dynamicIncludeName, itemDataObj, category, nestedViewItem, selectedIdentifier
+ input(type="text", placeholder="add character", class="addCharacterInput")
+ button(class="addCharacterButton") enter

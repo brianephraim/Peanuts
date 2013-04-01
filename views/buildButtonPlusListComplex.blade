@@ -3,7 +3,7 @@
   -var category = '';
  -var dataArrayProcessed = '';
  foreach nestedViewItem.nestedViewArray as nestedViewItem
-  -if(category !== '')
+  -if(nestedViewItem.dataArray !== 'childItemDataObj')
    -var containsItemDataObjArray = []
    -for(var i = 0, l= nestedViewItem.dataArray.length; i < l; i++){
     -if(_.indexOf(nestedViewItem.dataArray[i][category], itemDataObj) !== -1){
