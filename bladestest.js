@@ -115,7 +115,18 @@ if (Meteor.isClient) {
                     parent:self,
                     k:k++,
                     includeName:'genreListPanel',
-                    dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'genres')
+                    dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'genres'),
+                    returnNestedViewArray:function(self){ return (function(){
+                      var k = 0;
+                      return [
+                        Peanuts.createAView({
+                          parent:self,
+                          k:k++,
+                          includeName:'tvShowList',
+                          dataArray:tvShowColl.find().fetch()
+                        })
+                      ]
+                    })()}
                   }),
                   Peanuts.createAView({
                     parent:self,
@@ -134,37 +145,38 @@ if (Meteor.isClient) {
                         Peanuts.createAView({
                           parent:self,
                           k:k++,
-                          includeName:'characterList'
+                          includeName:'characterList',
+                          returnNestedViewArray:function(self){ return (function(){
+                            var k = 0;
+                            return [
+                              Peanuts.createAView({
+                                parent:self,
+                                k:k++,
+                                includeName:'tvShowList',
+                                dataArray:tvShowColl.find().fetch()
+                              })
+                            ]
+                          })()}
                         }),
                         Peanuts.createAView({
                           parent:self,
                           k:k++,
-                          includeName:'genreList'
+                          includeName:'genreList',
+                          returnNestedViewArray:function(self){ return (function(){
+                            var k = 0;
+                            return [
+                              Peanuts.createAView({
+                                parent:self,
+                                k:k++,
+                                includeName:'tvShowList',
+                                dataArray:tvShowColl.find().fetch()
+                              })
+                            ]
+                          })()}
                         })
                       ]
                     })()}
                   }),//
-                  Peanuts.createAView({
-                    parent:self,
-                    k:k++,
-                    includeName:'tvShowListPanel',
-                    dataArray:tvShowColl.find().fetch(),
-                    returnNestedViewArray:function(self){ return (function(){
-                      var k = 0;
-                      return [
-                        Peanuts.createAView({
-                          parent:self,
-                          k:k++,
-                          includeName:'characterList'
-                        }),
-                        Peanuts.createAView({
-                          parent:self,
-                          k:k++,
-                          includeName:'genreList'
-                        })
-                      ]
-                    })()}
-                  }),// /**/
                 ]
               })()
             })()
