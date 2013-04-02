@@ -82,29 +82,26 @@ if (Meteor.isClient) {
   tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
 
 
+
+  var characterMega = function(){return{/*start*/
+    includeName:'characterList',
+    dataArray:'childItemDataObj',
+    returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
+      [
+        //tvMega()
+      ]
+    )
+  }}
+
   var tvMega = function(){return{/*start*/
     includeName:'tvShowList',
     dataArray:tvShowColl.find().fetch(),
     returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
       [
-        {
-          includeName:'characterList',
-          dataArray:'childItemDataObj',
-          returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
-            [
-              {
-                includeName:'tvShowList',
-                dataArray:tvShowColl.find().fetch(),
-                returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
-                  []
-                )
-              }
-            ]
-          )
-        },
+        characterMega(),
         {
           includeName:'genreList',
-          dataArray:'childItemDataObj',
+          //dataArray:'childItemDataObj',
           returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
             [
               {

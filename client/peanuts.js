@@ -221,7 +221,43 @@ var Peanuts = new (function(){
     }, 300);
   });
   this.animations = {
-    appear:function(){
+    appear:function(transformOrigin){
+      var anim = CSSAnimations.create();
+      for(var i = 0; i<=100; i++){
+        var interpolatedValues = Tweenable.interpolate(
+          {
+            '-webkit-transform': 'rotate3d(1,0,0,-90deg)'
+          },
+          {
+            '-webkit-transform': 'rotate3d(0,0,0,0deg)'
+          },
+          i*0.01,
+          'easeOutBounce'
+        );
+        anim.setKeyframe(i+'%', interpolatedValues);
+      }
+      return '-webkit-animation: '+anim.name+' 1s ease;'+
+      //'-webkit-perspective-origin:'+transformOrigin+';';
+      '';
+    },
+    disappear:function(){
+      var anim = CSSAnimations.create();
+      for(var i = 0; i<=100; i++){
+        var interpolatedValues = Tweenable.interpolate(
+          {
+            '-webkit-transform': 'rotate3d(0,0,0,0deg)'
+          },
+          {
+            '-webkit-transform': 'rotate3d(1,0,0,-90deg)'
+          },
+          i*0.01,
+          'easeOutBounce'
+        );
+        anim.setKeyframe(i+'%', interpolatedValues);
+      }
+      return '-webkit-animation: '+anim.name+' 1s ease;';
+    },
+    appear2:function(){
       var anim = CSSAnimations.create();
       for(var i = 0; i<=100; i++){
         var interpolatedValues = Tweenable.interpolate(
@@ -238,7 +274,7 @@ var Peanuts = new (function(){
       }
       return '-webkit-animation: '+anim.name+' 1s ease;';
     },
-    disappear:function(){
+    disappear2:function(){
       var anim = CSSAnimations.create();
       for(var i = 0; i<=100; i++){
         var interpolatedValues = Tweenable.interpolate(
