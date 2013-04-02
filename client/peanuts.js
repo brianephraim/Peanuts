@@ -236,7 +236,7 @@ var Peanuts = new (function(){
         );
         anim.setKeyframe(i+'%', interpolatedValues);
       }
-      return '-webkit-animation: '+anim.name+' 1s ease;'+
+      return  '-webkit-animation: '+anim.name+' 1s ease;'
       //'-webkit-perspective-origin:'+transformOrigin+';';
       '';
     },
@@ -255,7 +255,8 @@ var Peanuts = new (function(){
         );
         anim.setKeyframe(i+'%', interpolatedValues);
       }
-      return '-webkit-animation: '+anim.name+' 1s ease;';
+      return  '-webkit-animation: '+anim.name+' 1s ease;'+
+              '-webkit-transform: rotate3d(1,0,0,-90deg);';
     },
     appear2:function(){
       var anim = CSSAnimations.create();

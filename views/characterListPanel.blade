@@ -1,4 +1,10 @@
 -arguments[0].h4Text = 'Characters Here';
 -arguments[0].category = 'characters';
 -arguments[0].includeItemBlade = 'characterListItem';
+-if(nestedViewItem.parent.viewId !== 'base')
+ function prependInjection()
+  input(type="text", placeholder="add character", class="addCharacterInput")
+  button(class="addCharacterButton") enter
+-else
+ function prependInjection()
 include 'basicListPanel'

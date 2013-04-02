@@ -76,9 +76,8 @@ if (Meteor.isClient) {
       var newName = $(e.target).closest('.form').find('.changeNameInput').val();
       tvShowColl.update({'_id':this.itemDataObj._id}, {$set:{name:newName}});
     }
-  }//asdfasdfasdfa
+  }
 
-  //})()
   tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
 
 

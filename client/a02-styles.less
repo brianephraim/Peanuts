@@ -419,13 +419,17 @@ a{text-decoration: none; color:@colorScheme05;}
 .showButton{border-radius:10px;background:@colorScheme01;padding:10px;cursor:pointer;border:2px solid @colorScheme02;color:@colorScheme02;}
 .showButton:hover{background:@colorScheme02;border:2px solid @colorScheme04;color:@colorScheme04;}
 .basicListPanel{
-    background:@colorScheme03;
-    padding:10px;margin-bottom:10px;
-    //-webkit-transition: all 2s;
-    -webkit-transform-origin:50% 0 0;
+    -webkit-transform-origin:100% 0 0;
     -webkit-perspective:500;
-    -web
+    -webkit-perspective-origin:0 50%;
     h4{font-size:20px;color:@colorScheme01;padding-bottom:10px;}
+    -webkit-transform: rotate3d(1,0,0,0deg);
+    margin-bottom:10px;
+    .inner{
+        background:@colorScheme03;
+        padding:10px;
+        -webkit-transform-origin:50% 0 0;
+    }
 }
 .basicListItem{background:@colorScheme05;padding:10px;margin-bottom:5px;
 -webkit-transform: rotate3d(0,0,0,0deg);
