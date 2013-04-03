@@ -41,7 +41,6 @@ if (Meteor.isClient) {
   Template.tvShowListButton.events = {
     "click": function (e, tmpl, x) {
       var self = this;
-      console.log(this)
       Peanuts.showHideView(self)
     }
   }
