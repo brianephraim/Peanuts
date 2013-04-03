@@ -1,6 +1,7 @@
 
 
 var Peanuts = new (function(){
+  this.theOuterView;
   this.meteorView = function(options){
     var self = this;
     var defaults = {
@@ -9,14 +10,13 @@ var Peanuts = new (function(){
        returnDataObj: function(){return {}},
        manipulation:function($el,self){}
     };
-    var settings = $.extend({}, defaults, options); 
-    var frag = Meteor.render(function() {
-      Template[settings.templateName].events = settings.eventMap
+    var settings = $.extend({}, defaults, options);
+    this.frag = Meteor.render(function() {
+      //Template[settings.templateName].events = settings.eventMap
       return Template[settings.templateName](settings.returnDataObj());
     });
-    var $el = $('<div/>').append(frag);
+    var $el = $('<div/>').append(this.frag);
     settings.manipulation($el,self);
-    this.frag = frag;
     this.$el = $el;
   }
 
@@ -133,7 +133,7 @@ var Peanuts = new (function(){
       this.parent = settings.parent;
       this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;
       this.includeName = settings.includeName;
-      this.viewIdX = this.includeName + (settings.k);
+      this.viewIdX = this.includeName + '###' + (settings.k) + '###';
       if(settings.dataArray === 'inherit'){
         this.dataArray = this.parent.dataArray;
       } else if(settings.dataArray === 'childItemDataObj'){
@@ -204,6 +204,34 @@ var Peanuts = new (function(){
       
     })
     return returnArray
+  }
+
+  this.prependView = function(nestedViewArray,viewSettings){
+    function adjustSessionForUnshiftingView(nestedViewArray){
+      for(var i = nestedViewArray.length; i--;){
+        var viewIdXnumber = +(nestedViewArray[i].viewIdX.replace( new RegExp("[^#]*###([^#]*)###.*","gm"),"$1"))
+        var newViewIdX = nestedViewArray[i].viewIdX.replace( new RegExp("^([^#]*)###[^#]*###.*","gm"),"$1") + '###'+(++viewIdXnumber) + '###';
+        var oldPrefix = nestedViewArray[i].viewId + '-' + nestedViewArray[i].viewIdX;
+        var newPrefix = nestedViewArray[i].viewId + '-' + newViewIdX;
+        function recursive(array){
+          for(var i = array.length; i--;){
+            var oldSession = 'selectedArray'+array[i].viewId+'-'+array[i].viewIdX;
+            var newSession = oldSession.replace( oldPrefix,newPrefix)
+            var sessionData = Session.get(oldSession);
+            Session.set(oldSession,[])
+            Session.set(newSession,sessionData)
+            recursive(array[i].nestedViewArray)
+          }
+        }
+        recursive(nestedViewArray[i].nestedViewArray)
+      }
+    }
+    adjustSessionForUnshiftingView(nestedViewArray)
+
+
+    var config = Session.get('config');
+    config.unshift(viewSettings)
+    Session.set('config',config);
   }
 
 

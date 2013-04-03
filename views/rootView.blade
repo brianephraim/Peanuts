@@ -2,7 +2,12 @@ div(class="rootViewWrapper")
  header
   h1 Peanut.js
   h2 A framework for organizing Meteor views
+
  section.mainSection
+  nav
+   button.addTvShowList Add TV Show List
+   button.addGenreList Add Genre List
+   button.addCharacterList Add Characters List
   foreach nestedViewArray as nestedViewItem
    -var animationState = '';
    -var dynamicIncludeName = nestedViewItem.includeName
