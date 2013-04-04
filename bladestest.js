@@ -27,6 +27,11 @@ if (Meteor.isClient) {
   Meteor.subscribe('tvShows', function () {});
 
   
+  Template.characterListPanel.valueA = function(){
+    return "A";
+  }
+
+
   Template.rootView.events = {
     "click .addCharacterList": function (e, tmpl, x) {
       var self = this;
@@ -56,11 +61,13 @@ if (Meteor.isClient) {
       Peanuts.animationEndHideShowCleanup(self)
     },
     "click .addCharacterButton": function (e, tmpl) {
+      console.log('asdf')
       var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
       var currentTvShowId = this.itemDataObj._id
       var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
       currentCharactersArray.push(newCharacter);
       tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
+      return false
     }
   }
   Template.genreListPanel.events = {
@@ -83,8 +90,12 @@ if (Meteor.isClient) {
   }
   Template.tvShowListItem.events = {
     "click .changeNameButton": function (e, tmpl, x) {
+      
+      console.log($(e.target).closest('.basicListPanel'))
       var newName = $(e.target).closest('.form').find('.changeNameInput').val();
       tvShowColl.update({'_id':this.itemDataObj._id}, {$set:{name:newName}});
+      e.stopPropagation()
+      return false
     }
   }
 
