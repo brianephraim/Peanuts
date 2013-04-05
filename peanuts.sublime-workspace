@@ -1,0 +1,1308 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"characters",
+				"characterList"
+			],
+			[
+				"viewId",
+				"viewIdX"
+			],
+			[
+				"template",
+				"Template"
+			],
+			[
+				"chara",
+				"characterList"
+			],
+			[
+				"ch",
+				"characterList"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "bladestest.js",
+			"settings":
+			{
+				"buffer_size": 8671,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/characterListPanel.blade",
+			"settings":
+			{
+				"buffer_size": 409,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/characterListButton.blade",
+			"settings":
+			{
+				"buffer_size": 23,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/basicListPanel.blade",
+			"settings":
+			{
+				"buffer_size": 936,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "client/a02-styles.less",
+			"settings":
+			{
+				"buffer_size": 15482,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "\n\nvar Peanuts = new (function(){\n  this.meteorView = function(options){\n    var self = this;\n    var defaults = {\n       templateName: '',\n       eventMap: {},\n       returnDataObj: function(){return {}},\n       manipulation:function($el,self){}\n    };\n    var settings = $.extend({}, defaults, options); \n    var frag = Meteor.render(function() {\n      Template[settings.templateName].events = settings.eventMap\n      return Template[settings.templateName](settings.returnDataObj());\n    });\n    var $el = $('<div/>').append(frag);\n    settings.manipulation($el,self);\n    this.frag = frag;\n    this.$el = $el;\n  }\n\n  this.returnStates = function(self){\n    var dataSets = {\n      tvShowId: self.selectedIdentifier,\n      previousBirthingArray: Session.get('birthingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),\n      previousSelectedArray: Session.get('selectedArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),\n      previousDyingArray: Session.get('dyingArray'+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX),\n    }\n    var states = {\n      previousBirthingArrayContainsId: _.indexOf(dataSets.previousBirthingArray, dataSets.tvShowId) === -1 ? false : true,\n      previousSelectedArrayContainsId: _.indexOf(dataSets.previousSelectedArray, dataSets.tvShowId) === -1 ? false : true,\n      previousDyingArrayContainsId: _.indexOf(dataSets.previousDyingArray, dataSets.tvShowId) === -1 ? false : true,\n\n      previousBirthingArrayExists: typeof dataSets.previousBirthingArray === 'undefined' ? false : true,\n      previousSelectedArrayExists: typeof dataSets.previousSelectedArray === 'undefined' ? false : true,\n      previousDyingArrayExists: typeof dataSets.previousDyingArray === 'undefined' ? false : true,\n\n      setDataArray: function(name,arr){\n        Session.set(name+self.nestedViewItem.viewId+'-'+self.nestedViewItem.viewIdX,arr);\n      }\n    }\n    return $.extend(states, dataSets);\n  }\n\n  this.showHideView2 = function(self){\n    var s = Peanuts.returnStates(self);\n    //Add to selected when appropriate\n    if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){\n      s.previousSelectedArray.push(s.tvShowId)\n      s.setDataArray('selectedArray',s.previousSelectedArray)\n    }\n    if(!s.previousSelectedArrayExists){\n      s.previousSelectedArray = [s.tvShowId]\n      s.setDataArray('selectedArray',s.previousSelectedArray)\n    }\n\n    //Add to birthing when appropriate\n    if(s.previousBirthingArrayExists && !s.previousBirthingArrayContainsId){\n      s.previousBirthingArray.push(s.tvShowId)\n      s.setDataArray('birthingArray',s.previousBirthingArray)\n    }\n    if(!s.previousBirthingArrayExists){\n      s.setDataArray('birthingArray',[s.tvShowId])\n    }\n\n    //Make an existing characterList disappear\n    if(\n      (s.previousSelectedArrayExists && s.previousSelectedArrayContainsId) && \n      (!s.previousBirthingArrayExists || !s.previousBirthingArrayContainsId)\n    ){\n      s.previousSelectedArray.splice(_.indexOf(s.previousSelectedArray, s.tvShowId),1)\n      if(s.previousDyingArrayExists && !s.previousDyingArrayContainsId){\n        s.previousDyingArray.push(s.tvShowId)\n      } else {\n        s.previousDyingArray = [s.tvShowId];\n      }\n      s.setDataArray('selectedArray',s.previousSelectedArray)\n      s.setDataArray('dyingArray',s.previousDyingArray)\n    }\n  }\n  this.showHideView = function(self){\n    var s = Peanuts.returnStates(self);\n    //Add to selected when appropriate\n    if(s.previousSelectedArrayExists && !s.previousSelectedArrayContainsId){\n      s.previousSelectedArray.push(s.tvShowId)\n      s.setDataArray('selectedArray',s.previousSelectedArray)\n    }\n    if(!s.previousSelectedArrayExists){\n      s.previousSelectedArray = [s.tvShowId]\n      s.setDataArray('selectedArray',s.previousSelectedArray)\n    }\n\n    //Add to birthing when appropriate\n    if(s.previousBirthingArrayExists && !s.previousBirthingArrayContainsId){\n      s.previousBirthingArray.push(s.tvShowId)\n      s.setDataArray('birthingArray',s.previousBirthingArray)\n    }\n    if(!s.previousBirthingArrayExists){\n      s.setDataArray('birthingArray',[s.tvShowId])\n    }\n\n    //Make an existing characterList disappear\n    if(\n      (s.previousSelectedArrayExists && s.previousSelectedArrayContainsId) && \n      (!s.previousBirthingArrayExists || !s.previousBirthingArrayContainsId)\n    ){\n      s.previousSelectedArray.splice(_.indexOf(s.previousSelectedArray, s.tvShowId),1)\n      if(s.previousDyingArrayExists && !s.previousDyingArrayContainsId){\n        s.previousDyingArray.push(s.tvShowId)\n      } else {\n        s.previousDyingArray = [s.tvShowId];\n      }\n      s.setDataArray('selectedArray',s.previousSelectedArray)\n      s.setDataArray('dyingArray',s.previousDyingArray)\n    }\n  }\n\n  this.createAView = function(options,parent,k,includeName,dataArray,nestedViewArray){\n    return new (function(){\n      var self = this;\n      var defaults = {\n        parent:'x',\n        k:0,\n        includeName:'',\n        dataArray:'childItemDataObj',\n        returnNestedViewArray:function(self){ return (function(){\n          var k = 0;\n          return []\n        })()}\n      };\n      var settings = $.extend({}, defaults, options); \n      this.parent = settings.parent;\n      this.viewId = self.parent.viewId + '-' + self.parent.viewIdX;\n      this.includeName = settings.includeName;\n      this.viewIdX = this.includeName + (settings.k);\n      if(settings.dataArray === 'inherit'){\n        this.dataArray = this.parent.dataArray;\n      } else if(settings.dataArray === 'childItemDataObj'){\n        this.dataArray = 'childItemDataObj';\n      }else if(settings.dataArray === 'empty'){\n        this.dataArray = [];\n      } else {\n        this.dataArray = settings.dataArray;\n      }\n      this.birthingIdArray = Session.get('birthingArray'+this.viewId+'-'+this.viewIdX);\n      this.dyingIdArray = Session.get('dyingArray'+this.viewId+'-'+this.viewIdX);\n      this.selectedIdArray = Session.get('selectedArray'+this.viewId+'-'+this.viewIdX);\n      this.nestedViewArray = settings.returnNestedViewArray(self)\n    })();\n  }\n  this.animationEndHideShowCleanup2 = function(self,viewNameWithIndex){\n    var s = Peanuts.returnStates(self);\n    if(s.previousBirthingArrayExists && s.previousBirthingArrayContainsId){\n      s.previousBirthingArray.splice(_.indexOf(s.previousBirthingArray, s.tvShowId),1)\n      s.setDataArray('birthingArray',s.previousBirthingArray)\n    }\n    if(s.previousDyingArrayExists && s.previousDyingArrayContainsId){\n      s.previousDyingArray.splice(_.indexOf(s.previousDyingArray, s.tvShowId),1)\n      s.setDataArray('dyingArray',s.previousDyingArray)\n    }\n  }\n  this.animationEndHideShowCleanup = function(self,viewNameWithIndex){\n    var s = Peanuts.returnStates(self);\n    if(s.previousBirthingArrayExists && s.previousBirthingArrayContainsId){\n      s.previousBirthingArray.splice(_.indexOf(s.previousBirthingArray, s.tvShowId),1)\n      s.setDataArray('birthingArray',s.previousBirthingArray)\n    }\n    if(s.previousDyingArrayExists && s.previousDyingArrayContainsId){\n      s.previousDyingArray.splice(_.indexOf(s.previousDyingArray, s.tvShowId),1)\n      s.setDataArray('dyingArray',s.previousDyingArray)\n    }\n  }\n  this.returnDistinctTagsArray = function(cursor,itemTagArray){\n    var returnArray = [];\n    cursor.forEach(function(item){\n      if(typeof item[itemTagArray] === 'string'){\n        if(_.indexOf(returnArray, item[itemTagArray]) === -1){\n            returnArray.push(item[itemTagArray])\n          }\n      } else {\n        for(var i = 0, l = item[itemTagArray].length; i < l; i++){\n          if(_.indexOf(returnArray, item[itemTagArray][i]) === -1){\n            returnArray.push(item[itemTagArray][i])\n          }\n        }\n      }\n      \n    })\n    return returnArray\n  }\n\n\n\n  var $window = $(window);\n  var windowWidth = $window.width();\n  var resizeTimer;\n  function resizeAction(){\n    windowWidth = $window.width();\n  }\n  $window.resize(function() {\n    clearTimeout(resizeTimer);\n    resizeTimer = setTimeout(function(){\n      resizeAction();\n    }, 300);\n  });\n  this.animations = {\n    appear:function(){\n      var anim = CSSAnimations.create();\n      for(var i = 0; i<=100; i++){\n        var interpolatedValues = Tweenable.interpolate(\n          {\n            '-webkit-transform': 'translate3d('+windowWidth+'px,0,0)'\n          },\n          {\n            '-webkit-transform': 'translate3d(0px,0,0)'\n          },\n          i*0.01,\n          'easeOutBounce'\n        );\n        anim.setKeyframe(i+'%', interpolatedValues);\n      }\n      return '-webkit-animation: '+anim.name+' 1s ease;';\n    },\n    disappear:function(){\n      var anim = CSSAnimations.create();\n      for(var i = 0; i<=100; i++){\n        var interpolatedValues = Tweenable.interpolate(\n          {\n            '-webkit-transform': 'translate3d(0px,0,0)'\n          },\n          {\n            '-webkit-transform': 'translate3d('+windowWidth+'px,0,0)'\n          },\n          i*0.01,\n          'easeOutBounce'\n        );\n        anim.setKeyframe(i+'%', interpolatedValues);\n      }\n      return '-webkit-animation: '+anim.name+' 1s ease;';\n    }\n  }\n  \n})()\n",
+			"file": "client/peanuts.js",
+			"file_size": 9151,
+			"file_write_time": 1365163443000000,
+			"settings":
+			{
+				"buffer_size": 9151,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 19 files for \"include 'dy\"\n\n/Users/brianephraim/meteortest/peanuts/views/basicListPanel.blade:\n   21       -var selectedIdentifier = itemDataObj[identifyingAttribute];\n   22      -var dynamicIncludeName = includeItemBlade;\n   23:     include 'dynamicInclude' exposing dynamicIncludeName, itemDataObj, category, nestedViewItem, selectedIdentifier\n\n/Users/brianephraim/meteortest/peanuts/views/buildButtonPlusListComplex.blade:\n   11     -var dataArrayProcessed = containsItemDataObjArray;\n   12    -var dynamicIncludeName = nestedViewItem.includeName + 'Button'\n   13:   include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, category, dataArrayProcessed, selectedIdentifier\n   14    -var includeName = nestedViewItem.includeName\n   15    -if(_.indexOf(nestedViewItem.dyingIdArray, selectedIdentifier) !== -1)\n   16     -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'\n   17     -var animationState = 'dying';\n   18:    include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier\n   19    -else if(_.indexOf(nestedViewItem.birthingIdArray, selectedIdentifier) !== -1)\n   20     -var dynamicIncludeName = nestedViewItem.includeName + 'Panel'\n   21     -var animationState = 'birthing';\n   22:    include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier\n   23    -else if(_.indexOf(nestedViewItem.selectedIdArray, selectedIdentifier) !== -1)\n   24     -var dynamicIncludeName = nestedViewItem.includeName + 'Panel';\n   25     -var animationState = 'selected';\n   26:    include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier\n\n/Users/brianephraim/meteortest/peanuts/views/characterList.blade:\n    1  -var dynamicIncludeName = nestedViewItem.includeName + 'Panel';\n    2: include 'dynamicInclude'\n\n/Users/brianephraim/meteortest/peanuts/views/genreList.blade:\n    1  -var dynamicIncludeName = nestedViewItem.includeName + 'Panel';\n    2: include 'dynamicInclude'\n\n/Users/brianephraim/meteortest/peanuts/views/rootView.blade:\n   12     -var animationState = '';\n   13     -var dynamicIncludeName = nestedViewItem.includeName\n   14:    include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, animationState\n   15   footer\n   16    p\n\n/Users/brianephraim/meteortest/peanuts/views/tvShowList.blade:\n    1  -var dynamicIncludeName = nestedViewItem.includeName + 'Panel';\n    2: include 'dynamicInclude'\n\n9 matches across 6 files\n\n\nSearching 19 files for \"characters here\"\n\n/Users/brianephraim/meteortest/peanuts/views/characterListPanel.blade:\n    1  -console.log(valueA)\n    2: -arguments[0].h4Text = 'Characters Here';\n    3  -arguments[0].category = 'characters';\n    4  -arguments[0].includeItemBlade = 'characterListItem';\n\n1 match in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 2975,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "server/initialize.js",
+			"settings":
+			{
+				"buffer_size": 109,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/head.blade",
+			"settings":
+			{
+				"buffer_size": 20,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/body.blade",
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/rootView.blade",
+			"settings":
+			{
+				"buffer_size": 550,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bladestest.html",
+			"settings":
+			{
+				"buffer_size": 33,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/basicListItem.blade",
+			"settings":
+			{
+				"buffer_size": 88,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/tvShowListButton.blade",
+			"settings":
+			{
+				"buffer_size": 24,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/tvShowListPanel.blade",
+			"settings":
+			{
+				"buffer_size": 217,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/tvShowListItem.blade",
+			"settings":
+			{
+				"buffer_size": 320,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/characterListItem.blade",
+			"settings":
+			{
+				"buffer_size": 23,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/genreListButton.blade",
+			"settings":
+			{
+				"buffer_size": 19,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/genreListPanel.blade",
+			"settings":
+			{
+				"buffer_size": 175,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/genreListItem.blade",
+			"settings":
+			{
+				"buffer_size": 23,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/genreList.blade",
+			"settings":
+			{
+				"buffer_size": 88,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/buildButtonPlusListComplex.blade",
+			"settings":
+			{
+				"buffer_size": 1714,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/characterList.blade",
+			"settings":
+			{
+				"buffer_size": 94,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "views/dynamicInclude.blade",
+			"settings":
+			{
+				"buffer_size": 58,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/brianephraim/meteortest/peanuts/client/bladestest.css",
+		"/Users/brianephraim/meteortest/peanuts/views/basicListPanel2.blade",
+		"/Users/brianephraim/meteortest/peanuts/client/main.less",
+		"/Users/brianephraim/meteortest/peanuts/client/a02-styles.less.css",
+		"/Volumes/BOOTCAMP/Users/defualt/Sites/blaboidAws/pages/main.less",
+		"/Volumes/BOOTCAMP/Users/defualt/Sites/blaboidAws/index.php",
+		"/Users/brianephraim/meteortest/meteor-build-a-multi-page-app/src/pages/pages.less",
+		"/Users/brianephraim/meteortest/peanuts/client/a01-reset.css",
+		"/Users/brianephraim/meteortest/peanuts/bladestest.css",
+		"/Users/brianephraim/meteortest/peanuts/a01-reset.css",
+		"/Users/brianephraim/meteortest/peanuts/views/genreListPanel2.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/characterListItem.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/buildButtonPlusListComplex2.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/tvShowListItem.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/tvShowItem.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/tvShowList.blade",
+		"/Users/brianephraim/meteortest/Meteornest/Meteornest.js",
+		"/Users/brianephraim/meteortest/peanuts/bladestest.js",
+		"/Users/brianephraim/meteortest/peanuts/client/lib/a.js",
+		"/Users/brianephraim/meteortest/peanuts/views/genreList.blade",
+		"/Users/brianephraim/meteortest/ch6/Meteor/todos/client/todos.js",
+		"/Users/brianephraim/meteortest/ch6/Meteor/todos/server/publish.js",
+		"/Users/brianephraim/meteortest/peanuts/views/characterList.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/customButton.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/customPanel.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/body.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/head.blade",
+		"/Users/brianephraim/meteortest/peanuts/views/asdf.blade 2",
+		"/Users/brianephraim/meteortest/bladestest/views/characterListItem.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/characterList.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/tvShowItem.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/tvShowList.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/rootView.blade",
+		"/Users/brianephraim/meteortest/bladestest/bladestest.html",
+		"/Users/brianephraim/meteortest/bladestest/bladestest.css",
+		"/Users/brianephraim/meteortest/bladestest/bladestest.js",
+		"/Users/brianephraim/meteortest/shifty/src/shifty.token.js",
+		"/Users/brianephraim/meteortest/shifty/dist/shifty.js",
+		"/Users/brianephraim/meteortest/bladestest/client/shifty.min.js.js",
+		"/Users/brianephraim/meteortest/bladestest/css-animations.js",
+		"/Users/brianephraim/meteortest/bladestest/smart.json",
+		"/Users/brianephraim/meteortest/bladestest/views/asdf.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/head.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/test.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/body.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/foreachtest.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/litest.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/test2.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/homepage.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/tv_show_list.blade",
+		"/Users/brianephraim/meteortest/bladestest/views/tv-show-list.blade",
+		"/Users/brianephraim/meteortest/Meteornest/Meteorite.css",
+		"/Users/brianephraim/meteortest/Meteornest/Meteorite.html",
+		"/Users/brianephraim/meteortest/Meteornest/Meteorite.js",
+		"/Users/brianephraim/meteortest/Meteorite/Meteorite.css",
+		"/Users/brianephraim/meteortest/Meteorite/Meteorite.html",
+		"/Users/brianephraim/meteortest/Meteorite/Meteorite.js",
+		"/Users/brianephraim/meteortest/ch6/Meteor/LendLib/LendLib.html",
+		"/Users/brianephraim/meteortest/ch6/Meteor/LendLib/server/LendLibServer.js",
+		"/Users/brianephraim/meteortest/ch6/Meteor/LendLib/LendLib.js",
+		"/Users/brianephraim/meteortest/ch6/Meteor/LendLib/client/LendLibClient.js",
+		"/Users/brianephraim/meteortest/ch6/Meteor/LendLib/LendLibClient.js",
+		"/Users/brianephraim/meteortest/ch6/Meteor/LendLib/client/bootstrap/js/bootstrap.min.js",
+		"/Users/brianephraim/meteortest/ch5/Meteor/LendLib/LendLib.css",
+		"/Users/brianephraim/meteortest/ch5/Meteor/LendLib/LendLib.html",
+		"/Users/brianephraim/meteortest/ch5/Meteor/LendLib/LendLib.js",
+		"/Users/brianephraim/meteortest/meteor-build-a-multi-page-app/src/pages/pages.html",
+		"/Users/brianephraim/meteortest/meteor-build-a-multi-page-app/src/pages/pages.js",
+		"/Volumes/BOOTCAMP/meteor/testtest/testtest.css",
+		"/Volumes/BOOTCAMP/meteor/testtest/testtest.html",
+		"/Volumes/BOOTCAMP/meteor/testtest/testtest.js"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/Users/brianephraim/meteortest/peanuts/views",
+			"",
+			"/Users/brianephraim/meteortest/peanuts",
+			"",
+			"/Users/brianephraim/meteortest/peanuts",
+			"",
+			"/Users/brianephraim/meteortest/peanuts",
+			"",
+			"/Users/brianephraim/meteortest/peanuts",
+			"tvShowItem",
+			"",
+			"/Users/brianephraim/meteortest/peanuts",
+			"",
+			"/Users/brianephraim/meteortest/node-blade",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"characters here",
+			"include 'dy",
+			"dynamicInclude",
+			"dynamicIncludeName, nestedViewItem, itemDataObj, animationState, category, dataArrayProcessed, selectedIdentifier",
+			"arguments",
+			"brianephraim",
+			"meteortest",
+			"dynamicInclude",
+			"brianephraim",
+			"asdfasdf",
+			"brianephraim",
+			"addCharacterButton",
+			"'-'",
+			"base",
+			"viewidX",
+			"'selectedArray'",
+			"viewidX",
+			"selectedArray",
+			"brianephraim",
+			"session",
+			"meteorView",
+			"returnDataObj",
+			"meteorView",
+			"a fram",
+			"asdf",
+			"zxcv",
+			"qwer",
+			"appendInjection",
+			"function textbox",
+			"basicListPanel",
+			"add character",
+			"appear",
+			"perspe",
+			"returnNestedViewArray",
+			"dynam",
+			"createAViewSequel",
+			"typeof",
+			"dyn",
+			"dynam",
+			"dataArrayProcessed",
+			"dataarrayprocessed",
+			"welcome to",
+			"dataArrayProcessed",
+			"childItemDataObj",
+			"dataArrayProcessed",
+			"basicList",
+			"buildb",
+			"dataArrayProcessed",
+			"typeof",
+			"show/",
+			"tvshowlistitem",
+			"box-si",
+			"border",
+			"section",
+			"welcome to",
+			"welcome",
+			"font",
+			"border-box",
+			"basicListItem",
+			"characterList",
+			"schamColor",
+			"characterItem",
+			"buildb",
+			"genre",
+			"fff",
+			"genreListpanel2",
+			"typeof",
+			"animationState",
+			"'dynamicInclude' exposing",
+			"animationState",
+			"typeof",
+			"+ 'p",
+			"+'p",
+			"animationState",
+			"dataArrayProcessed",
+			"showhideview2",
+			"returnStates2",
+			"listitem\" e",
+			"selectedIdentifier",
+			"category",
+			"buildButtonPlusListComplex",
+			"buildBu",
+			"x2",
+			"returnDistinctTagsArray",
+			"tvshowitem",
+			"tvshowlistitem",
+			"tvshowitem",
+			"nestedViewArray",
+			"panel2",
+			"dataArray",
+			"subscr",
+			"tvShowColl",
+			"form",
+			"changeNameInput",
+			"tvShowObj",
+			"dataArray",
+			"asdf",
+			"fadeOut",
+			"slideIn",
+			"disappearAnimation",
+			"appearAnimation",
+			"animationEndHideShowCleanup",
+			"createaview",
+			"showHideView",
+			"meteorView",
+			"nestedViewItexm",
+			"nestedViewItem2",
+			"customB",
+			"returnStates2",
+			"returnStates",
+			"showHideView2",
+			"showHideView",
+			"animationEndHideShowCleanup2",
+			"animationEndHideShowCleanup",
+			"custome",
+			"webkit",
+			"click",
+			"meteorView",
+			"new (",
+			"returnStates",
+			"marley",
+			"returnStates",
+			"characterListViewGenerator",
+			"makeReactive",
+			"kill",
+			"characterListViewGenerator",
+			"tvShowListViewGenerator",
+			"tvShowObj"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"prependInjection",
+			"function appendInjection",
+			"createReturnNestedViewArray",
+			"colorScheme",
+			"itemDataObj",
+			"nestedViewItem",
+			"nestedViewItexm",
+			"returnStates",
+			"showHideView",
+			"animationEndHideShowCleanup",
+			"dyingArray",
+			"selectedArray",
+			"birthingArray",
+			"s",
+			"selectedIdArray",
+			"selectedTvShowArray",
+			"nestedViewItem",
+			"nestedViewArray",
+			"dataArray",
+			"tvShows",
+			"Meteor.nest",
+			"tvShowListView2",
+			"tvShowListView1",
+			"listItemSubViewInsertionPoint",
+			"tvShowListViewGenerator",
+			"selectedTvShow",
+			"linkListClass",
+			"linkListViewGenerator",
+			"characterListViewGenerator",
+			"linkList",
+			"characters",
+			"tvShowColl"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "bladestest.js",
+					"settings":
+					{
+						"buffer_size": 8671,
+						"regions":
+						{
+							"bookmarks":
+							{
+								"flags": 144,
+								"icon": "bookmark",
+								"regions":
+								[
+									[
+										930,
+										930
+									],
+									[
+										5209,
+										5209
+									],
+									[
+										6939,
+										6758
+									]
+								],
+								"scope": "bookmarks"
+							}
+						},
+						"selection":
+						[
+							[
+								779,
+								785
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 220.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "views/characterListPanel.blade",
+					"settings":
+					{
+						"buffer_size": 409,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								62,
+								21
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "views/characterListButton.blade",
+					"settings":
+					{
+						"buffer_size": 23,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13,
+								13
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "views/basicListPanel.blade",
+					"settings":
+					{
+						"buffer_size": 936,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								567,
+								567
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "client/a02-styles.less",
+					"settings":
+					{
+						"buffer_size": 15482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14579,
+								14579
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 6310.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "client/peanuts.js",
+					"settings":
+					{
+						"buffer_size": 9151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3,
+								3
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"settings":
+					{
+						"buffer_size": 2975,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										244,
+										255
+									],
+									[
+										580,
+										591
+									],
+									[
+										971,
+										982
+									],
+									[
+										1334,
+										1345
+									],
+									[
+										1698,
+										1709
+									],
+									[
+										1991,
+										2002
+									],
+									[
+										2157,
+										2168
+									],
+									[
+										2353,
+										2364
+									],
+									[
+										2606,
+										2617
+									],
+									[
+										2831,
+										2846
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								2841,
+								2841
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 2,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 750.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "server/initialize.js",
+					"settings":
+					{
+						"buffer_size": 109,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								105,
+								105
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "views/head.blade",
+					"settings":
+					{
+						"buffer_size": 20,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "views/body.blade",
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "views/rootView.blade",
+					"settings":
+					{
+						"buffer_size": 550,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								475,
+								475
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "bladestest.html",
+					"settings":
+					{
+						"buffer_size": 33,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "views/basicListItem.blade",
+					"settings":
+					{
+						"buffer_size": 88,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								88,
+								88
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "views/tvShowListButton.blade",
+					"settings":
+					{
+						"buffer_size": 24,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24,
+								24
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "views/tvShowListPanel.blade",
+					"settings":
+					{
+						"buffer_size": 217,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								174,
+								190
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "views/tvShowListItem.blade",
+					"settings":
+					{
+						"buffer_size": 320,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								282,
+								282
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "views/characterListItem.blade",
+					"settings":
+					{
+						"buffer_size": 23,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23,
+								23
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "views/genreListButton.blade",
+					"settings":
+					{
+						"buffer_size": 19,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13,
+								13
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "views/genreListPanel.blade",
+					"settings":
+					{
+						"buffer_size": 175,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								151,
+								151
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "views/genreListItem.blade",
+					"settings":
+					{
+						"buffer_size": 23,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23,
+								23
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "views/genreList.blade",
+					"settings":
+					{
+						"buffer_size": 88,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "views/buildButtonPlusListComplex.blade",
+					"settings":
+					{
+						"buffer_size": 1714,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								719,
+								719
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "views/characterList.blade",
+					"settings":
+					{
+						"buffer_size": 94,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "views/dynamicInclude.blade",
+					"settings":
+					{
+						"buffer_size": 58,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								58,
+								58
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 230.0,
+	"status_bar_visible": true
+}
