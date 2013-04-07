@@ -1,7 +1,32 @@
 <head>
+  <title>Meteornest nesting views</title>
 </head>
 
 <body>
 </body>
+<template name="rootView">
+	<p>asdfasdf</p>
+  {{viewId}}
+	{{#each nestedViewArray}}
+    {{> dynamicNestedView}}
+		<p>dddd</p>
+	{{/each}}
+</template>
+
+<template name="dynamicNestedView">
+  {{#compareIncludeName "characterList"}}
+    {{> characterListPanel}}
+  {{/compareIncludeName}}
+</template>
+
+<template name="characterListPanel">
+  {{#each dataArray}}
+    <p>{{this}}</p>
+  {{/each}}
+</template>
+
+
+
+
 
 

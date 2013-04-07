@@ -1,6 +1,5 @@
-
 //rollback
-var Peanuts = new (function(){
+Peanuts = new (function(){
   this.theOuterView;
   this.meteorView = function(options){
     var self = this;
@@ -13,6 +12,7 @@ var Peanuts = new (function(){
     var settings = $.extend({}, defaults, options);
     this.frag = Meteor.render(function() {
       //Template[settings.templateName].events = settings.eventMap
+      console.log(settings.returnDataObj())
       return Template[settings.templateName](settings.returnDataObj());
     });
     var $el = $('<div/>').append(this.frag);

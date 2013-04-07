@@ -26,12 +26,8 @@ if(Meteor.isServer) {
 if (Meteor.isClient) {
   Meteor.subscribe('tvShows', function () {});
 
-  
-  Template.characterListPanel.valueA = function(){
-    return "A";
-  }
 
-
+  /*
   Template.rootView.events = {
     "click .addCharacterList": function (e, tmpl, x) {
       var self = this;
@@ -101,9 +97,9 @@ if (Meteor.isClient) {
 
   tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
 
+  
 
-
-  var characterMega = function(){return{/*start*/
+  var characterMega = function(){return{
     includeName:'characterList',
     dataArray:'childItemDataObj',
     returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
@@ -113,7 +109,7 @@ if (Meteor.isClient) {
     )
   }}
 
-  var tvMega = function(){return{/*start*/
+  var tvMega = function(){return{
     includeName:'tvShowList',
     dataArray:tvShowColl.find().fetch(),
     returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
@@ -136,7 +132,8 @@ if (Meteor.isClient) {
         },
       ]
     )
-  }}/*end*/
+  }}
+  */
   if(typeof Session.get('config') === 'undefined'){
     Session.set('config',[
       {
@@ -148,6 +145,18 @@ if (Meteor.isClient) {
     ]);
   }
   Peanuts.viewCatalog={};
+  //Template.dynamic.compare = function(lvalue, rvalue, options) {
+  Handlebars.registerHelper('compareIncludeName', function(value, options) {
+    if(value === this.includeName) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+  });
+
+
+  
+
   Meteor.startup(function () {
     return (function(){
       Peanuts.theOuterView = new Peanuts.meteorView({
@@ -168,7 +177,7 @@ if (Meteor.isClient) {
                   dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'characters'),
                   returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
                     [
-                      tvMega()
+                      //tvMega()
                     ]
                   )
                 })
