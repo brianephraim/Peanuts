@@ -10,7 +10,8 @@ div(class="rootViewWrapper")
    button.addCharacterList Add Characters List
   foreach nestedViewArray as nestedViewItem
    -var animationState = '';
-   -var dynamicIncludeName = nestedViewItem.includeName
+   -var dynamicIncludeName = nestedViewItem.includeName;
+   -console.log(dynamicIncludeName,nestedViewItem,animationState)
    include 'dynamicInclude' exposing dynamicIncludeName, nestedViewItem, animationState
  footer
   p
