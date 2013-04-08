@@ -5,23 +5,90 @@
 <body>
 </body>
 <template name="rootView">
-	<p>asdfasdf</p>
-  {{viewId}}
-	{{#each nestedViewArray}}
-    {{> dynamicNestedView}}
-		<p>dddd</p>
-	{{/each}}
+  <div class="rootViewWrapper">
+    <header>
+      <h1>Peanut.js</h1>
+      <h2>A framework for organizing Meteor views</h2>
+    </header>
+    <section class="mainSection">
+      <nav>
+        <button class="addTvShowList">Add TV Show List</button>
+        <button class="addGenreList">Add Genre List</button>
+        <button class="addCharacterList">Add Characters List</button>
+      </nav>
+      
+      {{#each nestedViewArray}}
+        {{> dynamicNestedView}}
+      {{/each}}
+    </section>
+    <footer>
+      <p>
+        <a href="https://github.com/defualt/Peanuts">find Peanuts on GitHub</a>
+      </p>
+    </footer>
+  </div>
 </template>
 
 <template name="dynamicNestedView">
+  {{#compareIncludeName "tvShowList"}}
+    {{> tvShowListPanel}}
+  {{/compareIncludeName}}
   {{#compareIncludeName "characterList"}}
     {{> characterListPanel}}
   {{/compareIncludeName}}
+  {{#compareIncludeName "genreList"}}
+    {{> genreListPanel}}
+  {{/compareIncludeName}}
+  
 </template>
 
 <template name="characterListPanel">
-  {{#each dataArray}}
-    <p>{{this}}</p>
+  {{settings}}
+  <p>CHARACTERS</p>
+  {{> basicListPanel}}
+</template>
+<template name="genreListPanel">
+  {{settings}}
+  {{> basicListPanel}}
+</template>
+<template name="tvShowListPanel">
+  {{settings}}
+  {{> basicListPanel}}
+</template>
+
+<template name="basicListPanel">
+  {{aHelper this}}
+  <div class="basicListPanel">
+    <div class="inner">
+      <h4>{{this.h4Text}}</h4>
+      {{#if equal includeName 'tvShowList'}}
+        <input type="text" placeholder="add character" class="addCharacterInput"/>
+        <button class="addCharacterButton"> enter</button>
+      {{/if}}
+      <ul>
+          {{> basicListItem}}
+      </ul>
+    </div>
+  </div> 
+</template>
+
+<template name="basicListItem">
+  {{#each dataArrayProcessed this}}
+    <li class="basicListItem">
+      {{#if equal ../includeName 'tvShowList'}}
+        <p><strong>TV Show Name:</strong> {{name}}</p>
+         <div class="form">
+          <input type="text" placeholder="change Name" class="changeNameInput"/>
+          <button class="changeNameButton"> enter</button>
+        </div>
+      {{else}}
+        <p>{{this}}</p>
+      {{/if}}
+      {{#each ../nestedViewArray}}
+        {{filterDataArray ../this}}
+        {{> dynamicNestedView}}
+      {{/each}}
+    </li>
   {{/each}}
 </template>
 

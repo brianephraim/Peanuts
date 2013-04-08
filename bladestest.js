@@ -98,7 +98,7 @@ if (Meteor.isClient) {
   tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
 
   
-
+  */
   var characterMega = function(){return{
     includeName:'characterList',
     dataArray:'childItemDataObj',
@@ -113,7 +113,7 @@ if (Meteor.isClient) {
     includeName:'tvShowList',
     dataArray:tvShowColl.find().fetch(),
     returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
-      [
+      [/*
         characterMega(),
         {
           includeName:'genreList',
@@ -130,11 +130,87 @@ if (Meteor.isClient) {
             ]
           )
         },
-      ]
+      */]
     )
   }}
-  */
-  if(typeof Session.get('config') === 'undefined'){
+  
+  
+  Peanuts.viewCatalog={};
+  //Template.dynamic.compare = function(lvalue, rvalue, options) {
+  Handlebars.registerHelper('compareIncludeName', function(value, options) {
+    //console.log(this)
+    if(value === this.includeName) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+  });
+  Handlebars.registerHelper('aHelper', function(a,b,c) {
+    console.log('HELPER-A',a)
+    //console.log(b)
+    //console.log(c)
+    console.log('HELPER-this',this)
+  });
+
+  Handlebars.registerHelper('boomer', function(a,b,options) {
+    if(a === b) {
+        return options.fn(this);
+    } else {
+        //return options.inverse(this);
+    }
+  });
+
+  Handlebars.registerHelper('equal', function(a,b, options) {
+    return a === b
+  });
+
+  Template.basicListItem.dataArrayProcessed = function(self) {
+    //console.log(self)
+    var returnDataArray = this.dataArray;
+    if(typeof this.dataArrayFiltered !== 'undefined'){
+      returnDataArray = this.dataArrayFiltered;
+    }
+    
+    return returnDataArray;
+  }
+
+  Template.basicListItem.filterDataArray = function(itemDataObj) {
+    if(this.dataArray === 'childItemDataObj'){
+      if(this.includeName === 'genreList'){
+        returnDataArray = this.parent.dataArrayFiltered.genres
+        this.dataArrayFiltered = itemDataObj.genres
+      }
+    } else {
+      console.log(itemDataObj)
+      if(this.parent.includeName === 'characterList'){
+        var containsItemDataObjArray = []
+        for(var i = 0, l= this.dataArray.length; i < l; i++){
+          if(_.indexOf(this.dataArray[i]['characters'], itemDataObj) !== -1){
+            containsItemDataObjArray.push(this.dataArray[i])
+          }
+        }
+        this.dataArrayFiltered = containsItemDataObjArray;
+      } else {
+        this.dataArrayFiltered = this.dataArray;
+      }
+      //console.log(dataArrayProcessed)
+      //console.log(b)
+      //console.log(c)
+      //console.log('HELPER-this',this)
+    }
+
+  };
+  Template.tvShowListPanel.settings = function(){
+    this.h4Text = 'Tv Show List Panel '
+  }
+  Template.characterListPanel.settings = function(){
+    this.h4Text = 'Character List Panel '
+  }
+  Template.genreListPanel.settings = function(){
+    this.h4Text = 'Genre List Panel '
+  }
+  
+if(typeof Session.get('config') === 'undefined'){
     Session.set('config',[
       {
         includeName:'characterList'
@@ -144,16 +220,6 @@ if (Meteor.isClient) {
       }
     ]);
   }
-  Peanuts.viewCatalog={};
-  //Template.dynamic.compare = function(lvalue, rvalue, options) {
-  Handlebars.registerHelper('compareIncludeName', function(value, options) {
-    if(value === this.includeName) {
-        return options.fn(this);
-    } else {
-        return options.inverse(this);
-    }
-  });
-
 
   
 
@@ -177,7 +243,23 @@ if (Meteor.isClient) {
                   dataArray:Peanuts.returnDistinctTagsArray(tvShowColl.find(),'characters'),
                   returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
                     [
-                      //tvMega()
+                      {
+                        includeName:'tvShowList',
+                        dataArray:tvShowColl.find().fetch(),
+                        returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
+                          [
+                            {
+                              includeName:'genreList',
+                              dataArray:'childItemDataObj',
+                              returnNestedViewArray:Peanuts.createReturnNestedViewArray(self, 
+                                [
+                                  
+                                ]
+                              )
+                            },
+                          ]
+                        )
+                      }
                     ]
                   )
                 })
