@@ -44,7 +44,6 @@
 
 <template name="characterListPanel">
   {{settings}}
-  <p>CHARACTERS</p>
   {{> basicListPanel}}
 </template>
 <template name="genreListPanel">
@@ -57,13 +56,16 @@
 </template>
 
 <template name="basicListPanel">
-  {{aHelper this}}
+  
   <div class="basicListPanel">
     <div class="inner">
-      <h4>{{this.h4Text}}</h4>
-      {{#if equal includeName 'tvShowList'}}
-        <input type="text" placeholder="add character" class="addCharacterInput"/>
-        <button class="addCharacterButton"> enter</button>
+      <h4>{{this.h4Text}} -- {{this.boomer2}}</h4>
+      {{#if equal dataArray 'childItemDataObj'}}
+        {{#if equal includeName 'characterList'}}
+          
+          <input type="text" placeholder="add character" class="addCharacterInput"/>
+          <button class="addCharacterButton"> enter</button>
+        {{/if}}
       {{/if}}
       <ul>
           {{> basicListItem}}
@@ -73,7 +75,8 @@
 </template>
 
 <template name="basicListItem">
-  {{#each dataArrayProcessed this}}
+  {{#each dataArrayProcessed}}
+    {{!aHelper this}}
     <li class="basicListItem">
       {{#if equal ../includeName 'tvShowList'}}
         <p><strong>TV Show Name:</strong> {{name}}</p>

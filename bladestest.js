@@ -27,8 +27,8 @@ if (Meteor.isClient) {
   Meteor.subscribe('tvShows', function () {});
 
 
-  /*
-  Template.rootView.events = {
+  
+  Template.rootView.events({
     "click .addCharacterList": function (e, tmpl, x) {
       var self = this;
       Peanuts.prependView(this.nestedViewArray,
@@ -38,7 +38,38 @@ if (Meteor.isClient) {
       )
 
     }
-  }
+  })
+  Template.basicListItem.events({
+    "click .changeNameButton": function (e, tmpl, x) {
+      var newName = $(e.target).closest('.form').find('.changeNameInput').val();
+      tvShowColl.update({'_id':this._id}, {$set:{name:newName}});
+      e.stopPropagation()
+      return false
+    }
+  })
+
+  Template.characterListPanel.events({
+    "webkitAnimationEnd": function (e, tmpl, x) {
+      var self = this;
+      Peanuts.animationEndHideShowCleanup(self)
+    },
+    "click .addCharacterButton": function (e, tmpl) {
+      console.log(this)
+      console.log(tmpl)
+      console.log(this.boomer)
+      console.log(this.boomer2)
+      /*
+      var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
+      var currentTvShowId = this.itemDataObj._id
+      var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
+      console.log(currentCharactersArray)
+      currentCharactersArray.push(newCharacter);
+      tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
+      */
+      return false
+    }
+  })
+  /*
   Template.tvShowListButton.events = {
     "click": function (e, tmpl, x) {
       var self = this;
@@ -51,21 +82,7 @@ if (Meteor.isClient) {
       Peanuts.animationEndHideShowCleanup2(self)
     }
   }
-  Template.characterListPanel.events = {
-    "webkitAnimationEnd": function (e, tmpl, x) {
-      var self = this;
-      Peanuts.animationEndHideShowCleanup(self)
-    },
-    "click .addCharacterButton": function (e, tmpl) {
-      console.log('asdf')
-      var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
-      var currentTvShowId = this.itemDataObj._id
-      var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
-      currentCharactersArray.push(newCharacter);
-      tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
-      return false
-    }
-  }
+  
   Template.genreListPanel.events = {
     "webkitAnimationEnd": function (e, tmpl, x) {
       var self = this;
@@ -84,17 +101,7 @@ if (Meteor.isClient) {
       Peanuts.showHideView(self)
     }
   }
-  Template.tvShowListItem.events = {
-    "click .changeNameButton": function (e, tmpl, x) {
-      
-      console.log($(e.target).closest('.basicListPanel'))
-      var newName = $(e.target).closest('.form').find('.changeNameInput').val();
-      tvShowColl.update({'_id':this.itemDataObj._id}, {$set:{name:newName}});
-      e.stopPropagation()
-      return false
-    }
-  }
-
+  
   tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
 
   
@@ -134,23 +141,30 @@ if (Meteor.isClient) {
     )
   }}
   
-  
-  Peanuts.viewCatalog={};
-  //Template.dynamic.compare = function(lvalue, rvalue, options) {
-  Handlebars.registerHelper('compareIncludeName', function(value, options) {
-    //console.log(this)
-    if(value === this.includeName) {
-        return options.fn(this);
-    } else {
-        return options.inverse(this);
-    }
-  });
+
+  //HELPER HELPER
+  //HELPER HELPER
+  //HELPER HELPER
+
   Handlebars.registerHelper('aHelper', function(a,b,c) {
     console.log('HELPER-A',a)
     //console.log(b)
     //console.log(c)
     console.log('HELPER-this',this)
   });
+
+
+  
+  Peanuts.viewCatalog={};
+  //Template.dynamic.compare = function(lvalue, rvalue, options) {
+  Handlebars.registerHelper('compareIncludeName', function(value, options) {
+    if(value === this.includeName) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+  });
+  
 
   Handlebars.registerHelper('boomer', function(a,b,options) {
     if(a === b) {
@@ -164,8 +178,7 @@ if (Meteor.isClient) {
     return a === b
   });
 
-  Template.basicListItem.dataArrayProcessed = function(self) {
-    //console.log(self)
+  Template.basicListItem.dataArrayProcessed = function() {
     var returnDataArray = this.dataArray;
     if(typeof this.dataArrayFiltered !== 'undefined'){
       returnDataArray = this.dataArrayFiltered;
@@ -175,13 +188,19 @@ if (Meteor.isClient) {
   }
 
   Template.basicListItem.filterDataArray = function(itemDataObj) {
+    
     if(this.dataArray === 'childItemDataObj'){
       if(this.includeName === 'genreList'){
         returnDataArray = this.parent.dataArrayFiltered.genres
-        this.dataArrayFiltered = itemDataObj.genres
+        this.dataArrayFiltered = itemDataObj.genres;
+      }
+      if(this.includeName === 'characterList'){
+        returnDataArray = this.parent.dataArrayFiltered.characters
+        this.dataArrayFiltered = itemDataObj.characters;
+        this.boomer = itemDataObj.name
+        console.log(this.boomer)
       }
     } else {
-      console.log(itemDataObj)
       if(this.parent.includeName === 'characterList'){
         var containsItemDataObjArray = []
         for(var i = 0, l= this.dataArray.length; i < l; i++){
@@ -193,10 +212,6 @@ if (Meteor.isClient) {
       } else {
         this.dataArrayFiltered = this.dataArray;
       }
-      //console.log(dataArrayProcessed)
-      //console.log(b)
-      //console.log(c)
-      //console.log('HELPER-this',this)
     }
 
   };
@@ -205,6 +220,7 @@ if (Meteor.isClient) {
   }
   Template.characterListPanel.settings = function(){
     this.h4Text = 'Character List Panel '
+    this.boomer2 = this.boomer
   }
   Template.genreListPanel.settings = function(){
     this.h4Text = 'Genre List Panel '
@@ -248,6 +264,15 @@ if(typeof Session.get('config') === 'undefined'){
                         dataArray:tvShowColl.find().fetch(),
                         returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
                           [
+                            {
+                              includeName:'characterList',
+                              dataArray:'childItemDataObj',
+                              returnNestedViewArray:Peanuts.createReturnNestedViewArray(self, 
+                                [
+                                  
+                                ]
+                              )
+                            },
                             {
                               includeName:'genreList',
                               dataArray:'childItemDataObj',

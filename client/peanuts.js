@@ -1,5 +1,4 @@
 //rollback
-console.log('rqwerqwerqwerqwe')
 Peanuts = new (function(){
   this.theOuterView;
   this.meteorView = function(options){
