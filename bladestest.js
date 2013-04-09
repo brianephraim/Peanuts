@@ -44,7 +44,7 @@ if (Meteor.isClient) {
       var newName = $(e.target).closest('.form').find('.changeNameInput').val();
       tvShowColl.update({'_id':this._id}, {$set:{name:newName}});
       e.stopPropagation()
-      return false 
+      return false  
     }
   })
 
