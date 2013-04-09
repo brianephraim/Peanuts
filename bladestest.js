@@ -46,10 +46,10 @@ if (Meteor.isClient) {
       e.stopPropagation()
       return false  
     },
-    "click .addCharacterButtonx": function (e, tmpl,c) {
-      console.log(this)
-      console.log(c)
-      console.log(tmpl)
+    "click .addCharacterButton": function (e, tmpl,c) {
+      console.log('basicListItem',this)
+      var asdf = Spark.getDataContext($(e.target).closest('.basicListItem')[0])
+      //console.log(asdf)
       /*
       var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
       var currentTvShowId = this.itemDataObj._id
@@ -66,20 +66,20 @@ if (Meteor.isClient) {
       var self = this;
       Peanuts.animationEndHideShowCleanup(self)
     },
-    "click": function (e, tmpl) {
-        console.log('asdfadsf')
-    },
     "click .addCharacterButton": function (e, tmpl) {
-      console.log(this)
-      console.log(tmpl)
-      
+      console.log('characterListPanel',this)
+      //I tried to assign the parent item data to "this" but there seems to be a closure mistake in Meteor.
+      //Instead, look at the dataContext in the DOM as below.
+      var asdf = Spark.getDataContext($(e.target).closest('.basicListItem')[0])
+      console.log(asdf)
+      /*
       var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
       var currentTvShowId = this._id
       var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
       console.log(currentCharactersArray)
       currentCharactersArray.push(newCharacter);
       tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
-      
+      */
       return false
     }
   }
