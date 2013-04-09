@@ -39,25 +39,17 @@ if (Meteor.isClient) {
 
     }
   })
-  Template.basicListItem.events({
+  Template.basicListItem.events = {
     "click .changeNameButton": function (e, tmpl, x) {
       var newName = $(e.target).closest('.form').find('.changeNameInput').val();
       tvShowColl.update({'_id':this._id}, {$set:{name:newName}});
       e.stopPropagation()
       return false  
-    }
-  })
-
-  Template.characterListPanel.events({
-    "webkitAnimationEnd": function (e, tmpl, x) {
-      var self = this;
-      Peanuts.animationEndHideShowCleanup(self)
     },
-    "click .addCharacterButton": function (e, tmpl) {
+    "click .addCharacterButtonx": function (e, tmpl,c) {
       console.log(this)
+      console.log(c)
       console.log(tmpl)
-      console.log(this.boomer)
-      console.log(this.boomer2)
       /*
       var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
       var currentTvShowId = this.itemDataObj._id
@@ -68,7 +60,29 @@ if (Meteor.isClient) {
       */
       return false
     }
-  })
+  }
+  Template.characterListPanel.events = {
+    "webkitAnimationEnd": function (e, tmpl, x) {
+      var self = this;
+      Peanuts.animationEndHideShowCleanup(self)
+    },
+    "click": function (e, tmpl) {
+        console.log('asdfadsf')
+    },
+    "click .addCharacterButton": function (e, tmpl) {
+      console.log(this)
+      console.log(tmpl)
+      
+      var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
+      var currentTvShowId = this._id
+      var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
+      console.log(currentCharactersArray)
+      currentCharactersArray.push(newCharacter);
+      tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
+      
+      return false
+    }
+  }
   /*
   Template.tvShowListButton.events = {
     "click": function (e, tmpl, x) {
@@ -164,15 +178,6 @@ if (Meteor.isClient) {
         return options.inverse(this);
     }
   });
-  
-
-  Handlebars.registerHelper('boomer', function(a,b,options) {
-    if(a === b) {
-        return options.fn(this);
-    } else {
-        //return options.inverse(this);
-    }
-  });
 
   Handlebars.registerHelper('equal', function(a,b, options) {
     return a === b
@@ -187,8 +192,7 @@ if (Meteor.isClient) {
     return returnDataArray;
   }
 
-  Template.basicListItem.filterDataArray = function(itemDataObj) {
-    
+  Template.basicListItem.filterDataArray = function(itemDataObj,b) {
     if(this.dataArray === 'childItemDataObj'){
       if(this.includeName === 'genreList'){
         returnDataArray = this.parent.dataArrayFiltered.genres
@@ -197,8 +201,6 @@ if (Meteor.isClient) {
       if(this.includeName === 'characterList'){
         returnDataArray = this.parent.dataArrayFiltered.characters
         this.dataArrayFiltered = itemDataObj.characters;
-        this.boomer = itemDataObj.name
-        console.log(this.boomer)
       }
     } else {
       if(this.parent.includeName === 'characterList'){
@@ -220,7 +222,6 @@ if (Meteor.isClient) {
   }
   Template.characterListPanel.settings = function(){
     this.h4Text = 'Character List Panel '
-    this.boomer2 = this.boomer
   }
   Template.genreListPanel.settings = function(){
     this.h4Text = 'Genre List Panel '

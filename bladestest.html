@@ -59,10 +59,9 @@
   
   <div class="basicListPanel">
     <div class="inner">
-      <h4>{{this.h4Text}} -- {{this.boomer2}}</h4>
+      <h4>{{this.h4Text}}</h4>
       {{#if equal dataArray 'childItemDataObj'}}
         {{#if equal includeName 'characterList'}}
-          
           <input type="text" placeholder="add character" class="addCharacterInput"/>
           <button class="addCharacterButton"> enter</button>
         {{/if}}
@@ -84,11 +83,13 @@
           <input type="text" placeholder="change Name" class="changeNameInput"/>
           <button class="changeNameButton"> enter</button>
         </div>
+        <input type="text" placeholder="add character" class="addCharacterInput"/>
+        <button class="addCharacterButton"> enter</button>
       {{else}}
         <p>{{this}}</p>
       {{/if}}
       {{#each ../nestedViewArray}}
-        {{filterDataArray ../this}}
+        {{filterDataArray ../this ../../this}}
         {{> dynamicNestedView}}
       {{/each}}
     </li>
