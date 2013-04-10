@@ -45,20 +45,6 @@ if (Meteor.isClient) {
       tvShowColl.update({'_id':this._id}, {$set:{name:newName}});
       e.stopPropagation()
       return false  
-    },
-    "click .addCharacterButton": function (e, tmpl,c) {
-      console.log('basicListItem',this)
-      var asdf = Spark.getDataContext($(e.target).closest('.basicListItem')[0])
-      //console.log(asdf)
-      /*
-      var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
-      var currentTvShowId = this.itemDataObj._id
-      var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
-      console.log(currentCharactersArray)
-      currentCharactersArray.push(newCharacter);
-      tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
-      */
-      return false
     }
   }
   Template.characterListPanel.events = {
@@ -67,20 +53,34 @@ if (Meteor.isClient) {
       Peanuts.animationEndHideShowCleanup(self)
     },
     "click .addCharacterButton": function (e, tmpl) {
-      console.log('characterListPanel',this)
       //I tried to assign the parent item data to "this" but there seems to be a closure mistake in Meteor.
       //Instead, look at the dataContext in the DOM as below.
-      var asdf = Spark.getDataContext($(e.target).closest('.basicListItem')[0])
-      console.log(asdf)
-      /*
-      var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
-      var currentTvShowId = this._id
+      var listItemContext = Spark.getDataContext($(e.target).closest('.basicListItem')[0])      
+      var newCharacter = $(e.target).closest('.form').find('.addCharacterInput').val();
+      console.log(newCharacter)
+      var currentTvShowId = listItemContext._id
       var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
-      console.log(currentCharactersArray)
       currentCharactersArray.push(newCharacter);
       tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
-      */
       return false
+    }
+  }
+   Template.tvShowListButton.events = {
+
+    "click": function (e, tmpl) {
+      var self = this;
+      var listItemContext = Spark.getDataContext($(e.target).closest('.basicListItem')[0]) 
+      Peanuts.showHideView(self,listItemContext)
+      return false
+    }
+  }
+
+  Template.tvShowListPanel.events = {
+    "webkitAnimationEnd": function (e, tmpl, x) {
+      var listItemContext = Spark.getDataContext($(e.target).closest('.basicListItem')[0]) 
+      var self = this;
+      Peanuts.animationEndHideShowCleanup(self,listItemContext)
+      return false;
     }
   }
   /*
@@ -159,13 +159,20 @@ if (Meteor.isClient) {
   //HELPER HELPER
   //HELPER HELPER
   //HELPER HELPER
+   Handlebars.registerHelper('fullMetal', function(a,b,c) {
+    console.log('fullmetal')
+
+
+  });
 
   Handlebars.registerHelper('aHelper', function(a,b,c) {
-    console.log('HELPER-A',a)
+    //console.log('HELPER-A',a)
     //console.log(b)
     //console.log(c)
-    console.log('HELPER-this',this)
+    console.log('HELPER-this',this.insertStyle)
   });
+
+
 
 
   
@@ -179,11 +186,13 @@ if (Meteor.isClient) {
     }
   });
 
+
   Handlebars.registerHelper('equal', function(a,b, options) {
     return a === b
   });
 
   Template.basicListItem.dataArrayProcessed = function() {
+    //console.log(this)
     var returnDataArray = this.dataArray;
     if(typeof this.dataArrayFiltered !== 'undefined'){
       returnDataArray = this.dataArrayFiltered;
@@ -192,7 +201,17 @@ if (Meteor.isClient) {
     return returnDataArray;
   }
 
-  Template.basicListItem.filterDataArray = function(itemDataObj,b) {
+  Handlebars.registerHelper('filterDataArray', function(itemDataObj) {
+  //Template.basicListItem.filterDataArray = function(itemDataObj) {
+    
+   /* */
+   //console.log(itemDataObj)
+    //console.log(this)
+    //this.insertStyle = 'opacity:.5;';
+    //console.log(this)
+    //console.log(itemDataObj)
+    
+
     if(this.dataArray === 'childItemDataObj'){
       if(this.includeName === 'genreList'){
         returnDataArray = this.parent.dataArrayFiltered.genres
@@ -202,6 +221,7 @@ if (Meteor.isClient) {
         returnDataArray = this.parent.dataArrayFiltered.characters
         this.dataArrayFiltered = itemDataObj.characters;
       }
+
     } else {
       if(this.parent.includeName === 'characterList'){
         var containsItemDataObjArray = []
@@ -214,11 +234,56 @@ if (Meteor.isClient) {
       } else {
         this.dataArrayFiltered = this.dataArray;
       }
-    }
 
-  };
+    }
+    
+
+    var selectedIdentifier =itemDataObj; 
+
+    if(_.indexOf(this.dyingIdArray, selectedIdentifier) !== -1){
+      console.log(selectedIdentifier)
+      console.log('dying')
+      this.insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
+    }
+    else if(_.indexOf(this.birthingIdArray, selectedIdentifier) !== -1){
+      console.log(selectedIdentifier)
+      console.log('birthing')
+      this.insertStyle = 'opacityx: 0;'+Peanuts.animations.appear(0);
+    }
+    else if(_.indexOf(this.selectedIdArray, selectedIdentifier) !== -1){
+      console.log('selected') 
+    }
+    //console.log('----')
+  });
+
+  
+
+
+  /*
+  Template.basicListPanel.insertStyle = function(self){
+    console.log(this) 
+    console.log(self)
+    var selectedIdentifier ='asdf'; 
+    if(_.indexOf(this.dyingIdArray, selectedIdentifier) !== -1){
+      console.log('dying')
+      insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
+    }
+    else if(_.indexOf(this.birthingIdArray, selectedIdentifier) !== -1){
+      console.log('birthing')
+      insertStyle = 'opacityx: 0;'+Peanuts.animations.appear(0);
+    }
+    else if(_.indexOf(this.selectedIdArray, selectedIdentifier) !== -1){
+      console.log('selected')
+
+    }
+    return ''
+  }
+  */
   Template.tvShowListPanel.settings = function(){
     this.h4Text = 'Tv Show List Panel '
+  }
+  Template.tvShowListButton.settings = function(){
+    this.h4Text = 'Tv Show List Button '
   }
   Template.characterListPanel.settings = function(){
     this.h4Text = 'Character List Panel '
