@@ -28,7 +28,7 @@ if (Meteor.isClient) {
 
 
   
-  Template.rootView.events({
+  Template.rootView.events = {
     "click .addCharacterList": function (e, tmpl, x) {
       var self = this;
       Peanuts.prependView(this.nestedViewArray,
@@ -38,52 +38,7 @@ if (Meteor.isClient) {
       )
 
     }
-  })
-  Template.basicListItem.events = {
-    "click .changeNameButton": function (e, tmpl, x) {
-      var newName = $(e.target).closest('.form').find('.changeNameInput').val();
-      tvShowColl.update({'_id':this._id}, {$set:{name:newName}});
-      e.stopPropagation()
-      return false  
-    }
   }
-  Template.characterListPanel.events = {
-    "webkitAnimationEnd": function (e, tmpl, x) {
-      var self = this;
-      Peanuts.animationEndHideShowCleanup(self)
-    },
-    "click .addCharacterButton": function (e, tmpl) {
-      //I tried to assign the parent item data to "this" but there seems to be a closure mistake in Meteor.
-      //Instead, look at the dataContext in the DOM as below.
-      var listItemContext = Spark.getDataContext($(e.target).closest('.basicListItem')[0])      
-      var newCharacter = $(e.target).closest('.form').find('.addCharacterInput').val();
-      console.log(newCharacter)
-      var currentTvShowId = listItemContext._id
-      var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
-      currentCharactersArray.push(newCharacter);
-      tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
-      return false
-    }
-  }
-   Template.tvShowListButton.events = {
-
-    "click": function (e, tmpl) {
-      var self = this;
-      var listItemContext = Spark.getDataContext($(e.target).closest('.basicListItem')[0]) 
-      Peanuts.showHideView(self,listItemContext)
-      return false
-    }
-  }
-
-  Template.tvShowListPanel.events = {
-    "webkitAnimationEnd": function (e, tmpl, x) {
-      var listItemContext = Spark.getDataContext($(e.target).closest('.basicListItem')[0]) 
-      var self = this;
-      Peanuts.animationEndHideShowCleanup(self,listItemContext)
-      return false;
-    }
-  }
-  /*
   Template.tvShowListButton.events = {
     "click": function (e, tmpl, x) {
       var self = this;
@@ -96,7 +51,21 @@ if (Meteor.isClient) {
       Peanuts.animationEndHideShowCleanup2(self)
     }
   }
-  
+  Template.characterListPanel.events = {
+    "webkitAnimationEnd": function (e, tmpl, x) {
+      var self = this;
+      Peanuts.animationEndHideShowCleanup(self)
+    },
+    "click .addCharacterButton": function (e, tmpl) {
+      console.log('asdf')
+      var newCharacter = $(e.target).closest('li').find('.addCharacterInput').val();
+      var currentTvShowId = this.itemDataObj._id
+      var currentCharactersArray = tvShowColl.findOne({_id:currentTvShowId}).characters;
+      currentCharactersArray.push(newCharacter);
+      tvShowColl.update({'_id':currentTvShowId}, {$set:{characters:currentCharactersArray}});
+      return false
+    }
+  }
   Template.genreListPanel.events = {
     "webkitAnimationEnd": function (e, tmpl, x) {
       var self = this;
@@ -115,11 +84,21 @@ if (Meteor.isClient) {
       Peanuts.showHideView(self)
     }
   }
-  
+  Template.tvShowListItem.events = {
+    "click .changeNameButton": function (e, tmpl, x) {
+      
+      console.log($(e.target).closest('.basicListPanel'))
+      var newName = $(e.target).closest('.form').find('.changeNameInput').val();
+      tvShowColl.update({'_id':this.itemDataObj._id}, {$set:{name:newName}});
+      e.stopPropagation()
+      return false
+    }
+  }
+
   tvShowColl.find( { 'genres':  'Adventure'   } ).fetch()
 
   
-  */
+  /**/
   var characterMega = function(){return{
     includeName:'characterList',
     dataArray:'childItemDataObj',
@@ -156,43 +135,37 @@ if (Meteor.isClient) {
   }}
   
 
-  //HELPER HELPER
-  //HELPER HELPER
-  //HELPER HELPER
-   Handlebars.registerHelper('fullMetal', function(a,b,c) {
-    console.log('fullmetal')
-
-
-  });
-
-  Handlebars.registerHelper('aHelper', function(a,b,c) {
-    //console.log('HELPER-A',a)
-    //console.log(b)
-    //console.log(c)
-    console.log('HELPER-this',this.insertStyle)
-  });
-
-
-
-
-  
   Peanuts.viewCatalog={};
   //Template.dynamic.compare = function(lvalue, rvalue, options) {
   Handlebars.registerHelper('compareIncludeName', function(value, options) {
+    //console.log(this)
     if(value === this.includeName) {
         return options.fn(this);
     } else {
         return options.inverse(this);
     }
   });
+  Handlebars.registerHelper('aHelper', function(a,b,c) {
+    console.log('HELPER-A',a)
+    //console.log(b)
+    //console.log(c)
+    console.log('HELPER-this',this)
+  });
 
+  Handlebars.registerHelper('boomer', function(a,b,options) {
+    if(a === b) {
+        return options.fn(this);
+    } else {
+        //return options.inverse(this);
+    }
+  });
 
   Handlebars.registerHelper('equal', function(a,b, options) {
     return a === b
   });
 
-  Template.basicListItem.dataArrayProcessed = function() {
-    //console.log(this)
+  Template.basicListItem.dataArrayProcessed = function(self) {
+    //console.log(self)
     var returnDataArray = this.dataArray;
     if(typeof this.dataArrayFiltered !== 'undefined'){
       returnDataArray = this.dataArrayFiltered;
@@ -200,29 +173,14 @@ if (Meteor.isClient) {
     
     return returnDataArray;
   }
-
-  Handlebars.registerHelper('filterDataArray', function(itemDataObj) {
-  //Template.basicListItem.filterDataArray = function(itemDataObj) {
-    
-   /* */
-   //console.log(itemDataObj)
-    //console.log(this)
-    //this.insertStyle = 'opacity:.5;';
-    //console.log(this)
-    //console.log(itemDataObj)
-    
-
+  Template.basicListItem.filterDataArray = function(itemDataObj) {
     if(this.dataArray === 'childItemDataObj'){
       if(this.includeName === 'genreList'){
         returnDataArray = this.parent.dataArrayFiltered.genres
-        this.dataArrayFiltered = itemDataObj.genres;
+        this.dataArrayFiltered = itemDataObj.genres
       }
-      if(this.includeName === 'characterList'){
-        returnDataArray = this.parent.dataArrayFiltered.characters
-        this.dataArrayFiltered = itemDataObj.characters;
-      }
-
     } else {
+      console.log(itemDataObj)
       if(this.parent.includeName === 'characterList'){
         var containsItemDataObjArray = []
         for(var i = 0, l= this.dataArray.length; i < l; i++){
@@ -234,56 +192,15 @@ if (Meteor.isClient) {
       } else {
         this.dataArrayFiltered = this.dataArray;
       }
-
+      //console.log(dataArrayProcessed)
+      //console.log(b)
+      //console.log(c)
+      //console.log('HELPER-this',this)
     }
-    
 
-    var selectedIdentifier =itemDataObj; 
-
-    if(_.indexOf(this.dyingIdArray, selectedIdentifier) !== -1){
-      console.log(selectedIdentifier)
-      console.log('dying')
-      this.insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
-    }
-    else if(_.indexOf(this.birthingIdArray, selectedIdentifier) !== -1){
-      console.log(selectedIdentifier)
-      console.log('birthing')
-      this.insertStyle = 'opacityx: 0;'+Peanuts.animations.appear(0);
-    }
-    else if(_.indexOf(this.selectedIdArray, selectedIdentifier) !== -1){
-      console.log('selected') 
-    }
-    //console.log('----')
-  });
-
-  
-
-
-  /*
-  Template.basicListPanel.insertStyle = function(self){
-    console.log(this) 
-    console.log(self)
-    var selectedIdentifier ='asdf'; 
-    if(_.indexOf(this.dyingIdArray, selectedIdentifier) !== -1){
-      console.log('dying')
-      insertStyle = 'opacityx: 0;'+Peanuts.animations.disappear();
-    }
-    else if(_.indexOf(this.birthingIdArray, selectedIdentifier) !== -1){
-      console.log('birthing')
-      insertStyle = 'opacityx: 0;'+Peanuts.animations.appear(0);
-    }
-    else if(_.indexOf(this.selectedIdArray, selectedIdentifier) !== -1){
-      console.log('selected')
-
-    }
-    return ''
-  }
-  */
+  };
   Template.tvShowListPanel.settings = function(){
     this.h4Text = 'Tv Show List Panel '
-  }
-  Template.tvShowListButton.settings = function(){
-    this.h4Text = 'Tv Show List Button '
   }
   Template.characterListPanel.settings = function(){
     this.h4Text = 'Character List Panel '
@@ -291,7 +208,7 @@ if (Meteor.isClient) {
   Template.genreListPanel.settings = function(){
     this.h4Text = 'Genre List Panel '
   }
-  
+ 
 if(typeof Session.get('config') === 'undefined'){
     Session.set('config',[
       {
@@ -330,15 +247,6 @@ if(typeof Session.get('config') === 'undefined'){
                         dataArray:tvShowColl.find().fetch(),
                         returnNestedViewArray:Peanuts.createReturnNestedViewArray(self,
                           [
-                            {
-                              includeName:'characterList',
-                              dataArray:'childItemDataObj',
-                              returnNestedViewArray:Peanuts.createReturnNestedViewArray(self, 
-                                [
-                                  
-                                ]
-                              )
-                            },
                             {
                               includeName:'genreList',
                               dataArray:'childItemDataObj',
